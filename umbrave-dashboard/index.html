@@ -16,6 +16,7 @@
   --bg-card:   #161b22;
   --bg-el:     #21262d;
   --bg-hover:  #1c2128;
+  --bg-outer:  #080b10;
   --border:    #30363d;
   --border-sub:#21262d;
   --accent:    #2F81F7;
@@ -33,9 +34,24 @@
   --mono:      'JetBrains Mono', 'Fira Code', monospace;
 }
 
+html[data-theme="light"] {
+  --bg:        #ffffff;
+  --bg-card:   #f6f8fa;
+  --bg-el:     #eaeef2;
+  --bg-hover:  #eaeef2;
+  --bg-outer:  #e8edf2;
+  --border:    #d0d7de;
+  --border-sub:#eaeef2;
+  --accent-dim: rgba(9,105,218,.1);
+  --green-dim: rgba(31,136,61,.1);
+  --text:      #1f2328;
+  --text-2:    #636c76;
+  --text-3:    #8c959f;
+}
+
 html { font-size: 14px; }
 body {
-  background: #080b10;
+  background: var(--bg-outer);
   font-family: var(--font);
   color: var(--text);
   min-height: 100vh;
@@ -93,10 +109,18 @@ body {
 }
 .tab-btn:last-child { border-right: none; }
 .tab-btn:hover { background: var(--bg-hover); color: var(--text); }
-.tab-btn.active {
-  background: var(--accent);
-  color: #fff;
+.tab-btn.active { background: var(--accent); color: #fff; }
+
+.theme-toggle {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  width: 32px; height: 32px;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; color: var(--text-2);
+  transition: all .15s; flex-shrink: 0;
 }
+.theme-toggle:hover { border-color: var(--accent); color: var(--accent); }
 
 /* ── Dashboard shell ── */
 .dashboard {
@@ -465,6 +489,9 @@ body {
     <span class="page-badge">Blueprint</span>
     <span class="page-title">Umbrave Analytics — Dashboard Reference</span>
   </div>
+  <button class="theme-toggle" onclick="toggleTheme(this)" title="Toggle light / dark">
+    <svg id="theme-icon" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="7" cy="7" r="3"/><path d="M7 1v1M7 12v1M1 7h1M12 7h1M3.22 3.22l.7.7M10.08 10.08l.7.7M3.22 10.78l.7-.7M10.08 3.92l.7-.7"/></svg>
+  </button>
   <div class="screen-tabs">
     <button class="tab-btn active" onclick="show(1,this)">Screen 1 — Overview</button>
     <button class="tab-btn" onclick="show(2,this)">Screen 2 — Sources & Funnel</button>
@@ -1222,6 +1249,20 @@ body {
 
 <script>
 // Screen switch
+function toggleTheme(btn) {
+  const html = document.documentElement
+  const isLight = html.getAttribute('data-theme') === 'light'
+  html.setAttribute('data-theme', isLight ? 'dark' : 'light')
+  const icon = document.getElementById('theme-icon')
+  if (icon) {
+    if (!isLight) {
+      icon.innerHTML = '<path d="M12 7A5 5 0 012 7a7 7 0 007-5 7 7 0 005 5z"/>'
+    } else {
+      icon.innerHTML = '<circle cx="7" cy="7" r="3"/><path d="M7 1v1M7 12v1M1 7h1M12 7h1M3.22 3.22l.7.7M10.08 10.08l.7.7M3.22 10.78l.7-.7M10.08 3.92l.7-.7"/>'
+    }
+  }
+}
+
 function show(n, btn) {
   stopS3()
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'))
@@ -2711,48 +2752,58 @@ setTimeout(initCharts, 100)
 
     <!-- RIGHT: Top Pages -->
     <div style="overflow-y:auto;display:flex;flex-direction:column">
-      <div style="padding:14px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-shrink:0">
-        <span style="font-size:13px;font-weight:700;color:var(--text)">Top Pages</span>
-        <span style="font-size:11px;color:var(--muted)">14 pages · sorted by visitors · 7 days</span>
+      <div style="padding:14px 18px;border-bottom:1px solid var(--border);flex-shrink:0">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+          <span style="font-size:13px;font-weight:700;color:var(--text)">Top Pages</span>
+          <span style="font-size:11px;color:var(--text-3)">14 pages · sorted by visitors · 7 days</span>
+        </div>
+        <!-- Legend -->
+        <div style="display:flex;align-items:center;gap:14px;font-size:10.5px;color:var(--text-2)">
+          <span style="font-weight:600;color:var(--text-3);text-transform:uppercase;letter-spacing:.05em;font-size:9.5px">Color =</span>
+          <span style="display:flex;align-items:center;gap:5px"><span style="width:10px;height:3px;border-radius:2px;background:#2F81F7;display:inline-block"></span>High traffic hub</span>
+          <span style="display:flex;align-items:center;gap:5px"><span style="width:10px;height:3px;border-radius:2px;background:#3fb950;display:inline-block"></span>Growing ↑</span>
+          <span style="display:flex;align-items:center;gap:5px"><span style="width:10px;height:3px;border-radius:2px;background:#8957e5;display:inline-block"></span>Product / feature</span>
+          <span style="display:flex;align-items:center;gap:5px"><span style="width:10px;height:3px;border-radius:2px;background:#d4a017;display:inline-block"></span>Content / blog</span>
+        </div>
       </div>
       <div style="padding:12px;flex:1">
 
-        <!-- Row 1: 3 large, 120px -->
+        <!-- Row 1: /home=blue(hub), /pricing=green(growing↑), /contact=amber(conversion) -->
         <div style="display:flex;gap:6px;margin-bottom:6px">
           <div style="flex:1;height:120px;background:var(--bg-card);border:1px solid var(--border);border-top:2px solid #2F81F7;border-radius:8px;padding:10px 12px;display:flex;flex-direction:column;cursor:pointer;transition:border-color .15s" onmouseover="this.style.borderColor='rgba(47,129,247,.5)'" onmouseout="this.style.borderColor='var(--border)'">
-            <div style="font-size:10.5px;font-family:ui-monospace,monospace;color:var(--text-muted)">/home</div>
-            <svg width="100%" height="36" viewBox="0 0 100 36" preserveAspectRatio="none" style="margin:auto 0"><defs><linearGradient id="g1" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#2F81F7" stop-opacity=".25"/><stop offset="100%" stop-color="#2F81F7" stop-opacity="0"/></linearGradient></defs><polygon fill="url(#g1)" points="0,32 12,26 25,28 38,20 50,18 62,13 75,10 88,7 100,4 100,36 0,36"/><polyline fill="none" stroke="#2F81F7" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" points="0,32 12,26 25,28 38,20 50,18 62,13 75,10 88,7 100,4"/></svg>
+            <div style="display:flex;align-items:center;justify-content:space-between"><span style="font-size:10.5px;font-family:ui-monospace,monospace;color:var(--text-2)">/home</span><span style="font-size:9.5px;color:#2F81F7;font-weight:600">hub</span></div>
+            <svg width="100%" height="36" viewBox="0 0 100 36" preserveAspectRatio="none" style="margin:auto 0"><defs><linearGradient id="g1s7" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#2F81F7" stop-opacity=".25"/><stop offset="100%" stop-color="#2F81F7" stop-opacity="0"/></linearGradient></defs><polygon fill="url(#g1s7)" points="0,32 12,26 25,28 38,20 50,18 62,13 75,10 88,7 100,4 100,36 0,36"/><polyline fill="none" stroke="#2F81F7" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" points="0,32 12,26 25,28 38,20 50,18 62,13 75,10 88,7 100,4"/></svg>
             <div style="font-size:20px;font-weight:700;color:var(--text);align-self:flex-end;line-height:1">12,345</div>
           </div>
-          <div style="flex:1;height:120px;background:var(--bg-card);border:1px solid var(--border);border-top:2px solid #8957e5;border-radius:8px;padding:10px 12px;display:flex;flex-direction:column;cursor:pointer;transition:border-color .15s" onmouseover="this.style.borderColor='rgba(137,87,229,.5)'" onmouseout="this.style.borderColor='var(--border)'">
-            <div style="font-size:10.5px;font-family:ui-monospace,monospace;color:var(--text-muted)">/pricing</div>
-            <svg width="100%" height="36" viewBox="0 0 100 36" preserveAspectRatio="none" style="margin:auto 0"><defs><linearGradient id="g2" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#8957e5" stop-opacity=".25"/><stop offset="100%" stop-color="#8957e5" stop-opacity="0"/></linearGradient></defs><polygon fill="url(#g2)" points="0,30 14,24 28,27 42,18 55,22 68,14 80,11 90,8 100,6 100,36 0,36"/><polyline fill="none" stroke="#8957e5" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" points="0,30 14,24 28,27 42,18 55,22 68,14 80,11 90,8 100,6"/></svg>
+          <div style="flex:1;height:120px;background:var(--bg-card);border:1px solid var(--border);border-top:2px solid #3fb950;border-radius:8px;padding:10px 12px;display:flex;flex-direction:column;cursor:pointer;transition:border-color .15s" onmouseover="this.style.borderColor='rgba(63,185,80,.5)'" onmouseout="this.style.borderColor='var(--border)'">
+            <div style="display:flex;align-items:center;justify-content:space-between"><span style="font-size:10.5px;font-family:ui-monospace,monospace;color:var(--text-2)">/pricing</span><span style="font-size:9.5px;color:#3fb950;font-weight:600">↑ 18%</span></div>
+            <svg width="100%" height="36" viewBox="0 0 100 36" preserveAspectRatio="none" style="margin:auto 0"><defs><linearGradient id="g2s7" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#3fb950" stop-opacity=".2"/><stop offset="100%" stop-color="#3fb950" stop-opacity="0"/></linearGradient></defs><polygon fill="url(#g2s7)" points="0,30 14,28 28,25 42,20 55,18 68,13 80,9 90,6 100,3 100,36 0,36"/><polyline fill="none" stroke="#3fb950" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" points="0,30 14,28 28,25 42,20 55,18 68,13 80,9 90,6 100,3"/></svg>
             <div style="font-size:20px;font-weight:700;color:var(--text);align-self:flex-end;line-height:1">8,456</div>
           </div>
-          <div style="flex:1;height:120px;background:var(--bg-card);border:1px solid var(--border);border-top:2px solid #3fb950;border-radius:8px;padding:10px 12px;display:flex;flex-direction:column;cursor:pointer;transition:border-color .15s" onmouseover="this.style.borderColor='rgba(63,185,80,.5)'" onmouseout="this.style.borderColor='var(--border)'">
-            <div style="font-size:10.5px;font-family:ui-monospace,monospace;color:var(--text-muted)">/contact</div>
-            <svg width="100%" height="36" viewBox="0 0 100 36" preserveAspectRatio="none" style="margin:auto 0"><defs><linearGradient id="g3" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#3fb950" stop-opacity=".2"/><stop offset="100%" stop-color="#3fb950" stop-opacity="0"/></linearGradient></defs><polygon fill="url(#g3)" points="0,28 16,22 32,24 48,19 62,16 76,18 88,12 100,10 100,36 0,36"/><polyline fill="none" stroke="#3fb950" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" points="0,28 16,22 32,24 48,19 62,16 76,18 88,12 100,10"/></svg>
+          <div style="flex:1;height:120px;background:var(--bg-card);border:1px solid var(--border);border-top:2px solid #d4a017;border-radius:8px;padding:10px 12px;display:flex;flex-direction:column;cursor:pointer;transition:border-color .15s" onmouseover="this.style.borderColor='rgba(212,160,23,.5)'" onmouseout="this.style.borderColor='var(--border)'">
+            <div style="display:flex;align-items:center;justify-content:space-between"><span style="font-size:10.5px;font-family:ui-monospace,monospace;color:var(--text-2)">/contact</span><span style="font-size:9.5px;color:#d4a017;font-weight:600">→ 2%</span></div>
+            <svg width="100%" height="36" viewBox="0 0 100 36" preserveAspectRatio="none" style="margin:auto 0"><defs><linearGradient id="g3s7" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#d4a017" stop-opacity=".2"/><stop offset="100%" stop-color="#d4a017" stop-opacity="0"/></linearGradient></defs><polygon fill="url(#g3s7)" points="0,20 16,18 32,22 48,19 62,18 76,20 88,17 100,16 100,36 0,36"/><polyline fill="none" stroke="#d4a017" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" points="0,20 16,18 32,22 48,19 62,18 76,20 88,17 100,16"/></svg>
             <div style="font-size:20px;font-weight:700;color:var(--text);align-self:flex-end;line-height:1">5,795</div>
           </div>
         </div>
 
-        <!-- Row 2: 4 medium, 82px -->
+        <!-- Row 2: /how-it-works=blue, /integrations=purple(product), /about=green(growing), /blog-post=amber -->
         <div style="display:flex;gap:6px;margin-bottom:6px">
           <div style="flex:1;height:82px;background:var(--bg-card);border:1px solid var(--border);border-top:2px solid #2F81F7;border-radius:8px;padding:9px 11px;display:flex;flex-direction:column;justify-content:space-between;cursor:pointer">
-            <div style="font-size:10px;font-family:ui-monospace,monospace;color:var(--text-muted)">/how-it-works</div>
+            <div style="display:flex;align-items:center;justify-content:space-between"><span style="font-size:10px;font-family:ui-monospace,monospace;color:var(--text-2)">/how-it-works</span><span style="font-size:9px;color:#2F81F7;font-weight:600">hub</span></div>
             <div style="display:flex;align-items:flex-end;justify-content:space-between"><svg width="60" height="22" viewBox="0 0 60 22"><polyline fill="none" stroke="#2F81F7" stroke-width="1.2" opacity=".5" points="0,18 12,14 24,15 36,10 48,8 60,5"/></svg><div style="font-size:16px;font-weight:700;color:var(--text)">4,679</div></div>
           </div>
           <div style="flex:1;height:82px;background:var(--bg-card);border:1px solid var(--border);border-top:2px solid #8957e5;border-radius:8px;padding:9px 11px;display:flex;flex-direction:column;justify-content:space-between;cursor:pointer">
-            <div style="font-size:10px;font-family:ui-monospace,monospace;color:var(--text-muted)">/integrations</div>
+            <div style="display:flex;align-items:center;justify-content:space-between"><span style="font-size:10px;font-family:ui-monospace,monospace;color:var(--text-2)">/integrations</span><span style="font-size:9px;color:#8957e5;font-weight:600">feature</span></div>
             <div style="display:flex;align-items:flex-end;justify-content:space-between"><svg width="60" height="22" viewBox="0 0 60 22"><polyline fill="none" stroke="#8957e5" stroke-width="1.2" opacity=".5" points="0,16 12,12 24,14 36,9 48,7 60,5"/></svg><div style="font-size:16px;font-weight:700;color:var(--text)">3,213</div></div>
           </div>
           <div style="flex:1;height:82px;background:var(--bg-card);border:1px solid var(--border);border-top:2px solid #3fb950;border-radius:8px;padding:9px 11px;display:flex;flex-direction:column;justify-content:space-between;cursor:pointer">
-            <div style="font-size:10px;font-family:ui-monospace,monospace;color:var(--text-muted)">/about</div>
-            <div style="display:flex;align-items:flex-end;justify-content:space-between"><svg width="60" height="22" viewBox="0 0 60 22"><polyline fill="none" stroke="#3fb950" stroke-width="1.2" opacity=".5" points="0,18 12,15 24,17 36,12 48,10 60,8"/></svg><div style="font-size:16px;font-weight:700;color:var(--text)">2,566</div></div>
+            <div style="display:flex;align-items:center;justify-content:space-between"><span style="font-size:10px;font-family:ui-monospace,monospace;color:var(--text-2)">/about</span><span style="font-size:9px;color:#3fb950;font-weight:600">↑ 9%</span></div>
+            <div style="display:flex;align-items:flex-end;justify-content:space-between"><svg width="60" height="22" viewBox="0 0 60 22"><polyline fill="none" stroke="#3fb950" stroke-width="1.2" opacity=".5" points="0,18 12,16 24,14 36,11 48,9 60,7"/></svg><div style="font-size:16px;font-weight:700;color:var(--text)">2,566</div></div>
           </div>
           <div style="flex:1;height:82px;background:var(--bg-card);border:1px solid var(--border);border-top:2px solid #d4a017;border-radius:8px;padding:9px 11px;display:flex;flex-direction:column;justify-content:space-between;cursor:pointer">
-            <div style="font-size:10px;font-family:ui-monospace,monospace;color:var(--text-muted)">/blog-post</div>
-            <div style="display:flex;align-items:flex-end;justify-content:space-between"><svg width="60" height="22" viewBox="0 0 60 22"><polyline fill="none" stroke="#d4a017" stroke-width="1.2" opacity=".5" points="0,14 12,12 24,16 36,11 48,9 60,7"/></svg><div style="font-size:16px;font-weight:700;color:var(--text)">1,973</div></div>
+            <div style="display:flex;align-items:center;justify-content:space-between"><span style="font-size:10px;font-family:ui-monospace,monospace;color:var(--text-2)">/blog-post</span><span style="font-size:9px;color:#d4a017;font-weight:600">content</span></div>
+            <div style="display:flex;align-items:flex-end;justify-content:space-between"><svg width="60" height="22" viewBox="0 0 60 22"><polyline fill="none" stroke="#d4a017" stroke-width="1.2" opacity=".5" points="0,14 12,12 24,16 36,13 48,11 60,10"/></svg><div style="font-size:16px;font-weight:700;color:var(--text)">1,973</div></div>
           </div>
         </div>
 
