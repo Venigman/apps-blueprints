@@ -471,6 +471,7 @@ body {
     <button class="tab-btn" onclick="show(3,this)">Screen 3 — Live Right Now</button>
     <button class="tab-btn" onclick="show(4,this)">Screen 4 — Conversion & Growth</button>
     <button class="tab-btn" onclick="show(5,this)">Screen 5 — Integrations</button>
+    <button class="tab-btn" onclick="show(6,this)">Screen 6 — UI Components</button>
   </div>
 </div>
 
@@ -1228,7 +1229,8 @@ function show(n, btn) {
   btn.classList.add('active')
   if (n === 3) { setTimeout(startS3, 80) }
   else if (n === 4) { setTimeout(initScreen4, 80) }
-  else if (n === 5) { /* static, no charts */ }
+  else if (n === 5) { /* static */ }
+  else if (n === 6) { /* static */ }
   else setTimeout(initCharts, 50)
 }
 
@@ -1979,5 +1981,612 @@ setTimeout(initCharts, 100)
   50% { opacity:.5; transform:scale(.8); }
 }
 </style>
-</body>
-</html>
+
+<!-- ══════════════════════════════════════════
+     SCREEN 6 — UI Components
+══════════════════════════════════════════ -->
+<style>
+.comp-page {
+  padding: 32px 36px;
+  overflow-y: auto;
+  height: calc(100vh - 112px);
+  background: var(--bg);
+}
+.comp-page-header {
+  display: flex; align-items: baseline; justify-content: space-between;
+  margin-bottom: 36px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--border);
+}
+.comp-page-title { font-size: 18px; font-weight: 700; color: var(--text); }
+.comp-page-sub { font-size: 12px; color: var(--muted); }
+
+/* group */
+.comp-group {
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  gap: 0 32px;
+  padding: 28px 0;
+  border-bottom: 1px solid var(--border);
+  align-items: start;
+}
+.comp-group:last-child { border-bottom: none; }
+.comp-group-label {}
+.comp-group-name {
+  font-size: 13px; font-weight: 700; color: var(--text);
+  margin-bottom: 4px;
+}
+.comp-group-desc { font-size: 11.5px; color: var(--text-muted); line-height: 1.5; margin-bottom: 8px; }
+.comp-group-pages {
+  display: flex; flex-wrap: wrap; gap: 4px;
+}
+.comp-page-tag {
+  font-size: 9.5px; font-weight: 600; color: var(--muted);
+  background: var(--bg-hover); border: 1px solid var(--border);
+  border-radius: 999px; padding: 2px 7px;
+}
+.comp-items {
+  display: flex; flex-wrap: wrap; align-items: flex-start;
+  gap: 10px;
+}
+.comp-row-label {
+  width: 100%; font-size: 10px; font-weight: 600;
+  color: var(--muted); text-transform: uppercase; letter-spacing: .08em;
+  margin-bottom: 2px; margin-top: 8px;
+}
+.comp-row-label:first-child { margin-top: 0; }
+.comp-divider-v {
+  width: 1px; height: 28px; background: var(--border); align-self: center; flex-shrink: 0;
+}
+
+/* ── 1. Buttons ── */
+.cb { display:inline-flex; align-items:center; gap:6px; font-size:12px; font-weight:500; padding:6px 14px; border-radius:7px; cursor:pointer; border:1px solid transparent; white-space:nowrap; }
+.cb-primary { background:#2F81F7; color:#fff; border-color:#2F81F7; }
+.cb-ghost   { background:transparent; color:var(--text-muted); border-color:var(--border); }
+.cb-danger  { background:rgba(248,81,73,.1); color:#f85149; border-color:rgba(248,81,73,.25); }
+.cb-success { background:rgba(63,185,80,.1); color:#3fb950; border-color:rgba(63,185,80,.25); }
+.cb-icon    { width:30px; height:30px; padding:0; justify-content:center; border-radius:7px; }
+.cb-xs      { font-size:11px; padding:4px 10px; border-radius:6px; }
+.cb-sm      { font-size:12px; padding:6px 14px; }
+.cb-lg      { font-size:13px; padding:8px 18px; border-radius:8px; }
+
+/* ── 2. Metric tiles ── */
+.mt {
+  background:var(--bg-card); border:1px solid var(--border);
+  border-radius:10px; padding:14px 16px; min-width:140px;
+}
+.mt-label { font-size:11px; color:var(--muted); margin-bottom:6px; }
+.mt-value { font-size:22px; font-weight:700; color:var(--text); margin-bottom:4px; line-height:1; }
+.mt-value-sm { font-size:16px; font-weight:700; color:var(--text); margin-bottom:4px; line-height:1; }
+.mt-delta { font-size:11px; font-weight:600; }
+.mt-delta-up   { color:#3fb950; }
+.mt-delta-down { color:#f85149; }
+.mt-delta-neu  { color:var(--muted); }
+.mt-sub { font-size:10.5px; color:var(--muted); }
+.mt-spark { margin-top:10px; }
+
+/* inline SVG sparklines */
+.spark-up   { stroke:#3fb950; fill:none; }
+.spark-down { stroke:#f85149; fill:none; }
+.spark-flat { stroke:#8b949e; fill:none; }
+
+/* ── 3. Badges & status ── */
+.badge {
+  display:inline-flex; align-items:center; gap:5px;
+  font-size:10.5px; font-weight:600; border-radius:999px;
+  padding:3px 9px; border:1px solid;
+}
+.badge-live    { background:rgba(63,185,80,.1);  color:#3fb950; border-color:rgba(63,185,80,.25); }
+.badge-warn    { background:rgba(210,153,34,.1); color:#d4a017; border-color:rgba(210,153,34,.2); }
+.badge-error   { background:rgba(248,81,73,.1);  color:#f85149; border-color:rgba(248,81,73,.2); }
+.badge-info    { background:rgba(47,129,247,.1); color:#2F81F7; border-color:rgba(47,129,247,.2); }
+.badge-muted   { background:rgba(139,148,158,.08); color:#8b949e; border-color:rgba(139,148,158,.15); }
+.badge-purple  { background:rgba(163,113,247,.1); color:#a371f7; border-color:rgba(163,113,247,.2); }
+.badge-dot::before { content:''; display:inline-block; width:6px; height:6px; border-radius:50%; background:currentColor; }
+.delta-chip {
+  display:inline-flex; align-items:center; gap:3px;
+  font-size:11px; font-weight:600; padding:2px 7px;
+  border-radius:6px;
+}
+.delta-chip-up   { background:rgba(63,185,80,.1);  color:#3fb950; }
+.delta-chip-down { background:rgba(248,81,73,.1);  color:#f85149; }
+.delta-chip-neu  { background:rgba(139,148,158,.08); color:#8b949e; }
+
+/* ── 4. Data rows ── */
+.data-row-wrap { min-width:280px; background:var(--bg-card); border:1px solid var(--border); border-radius:10px; overflow:hidden; }
+.data-row {
+  display:flex; align-items:center; gap:10px;
+  padding:9px 14px; border-bottom:1px solid var(--border);
+  font-size:12px;
+}
+.data-row:last-child { border-bottom:none; }
+.dr-rank { width:16px; text-align:center; font-size:10.5px; color:var(--muted); flex-shrink:0; }
+.dr-flag { font-size:14px; flex-shrink:0; }
+.dr-icon { width:22px; height:22px; border-radius:5px; flex-shrink:0; display:flex;align-items:center;justify-content:center; font-size:11px; }
+.dr-label { flex:1; color:var(--text); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.dr-sub { font-size:10.5px; color:var(--muted); }
+.dr-bar-wrap { width:70px; height:4px; background:var(--bg-hover); border-radius:2px; flex-shrink:0; }
+.dr-bar { height:4px; border-radius:2px; background:#2F81F7; }
+.dr-value { font-size:11.5px; font-weight:600; color:var(--text); flex-shrink:0; text-align:right; min-width:36px; }
+
+.event-feed-wrap { min-width:240px; background:var(--bg-card); border:1px solid var(--border); border-radius:10px; overflow:hidden; }
+.event-item {
+  display:flex; align-items:flex-start; gap:8px;
+  padding:8px 12px; border-bottom:1px solid var(--border); font-size:11.5px;
+}
+.event-item:last-child { border-bottom:none; }
+.ev-dot { width:7px; height:7px; border-radius:50%; flex-shrink:0; margin-top:3px; }
+.ev-text { flex:1; color:var(--text-muted); line-height:1.4; }
+.ev-text strong { color:var(--text); font-weight:600; }
+.ev-time { font-size:10px; color:var(--muted); flex-shrink:0; }
+
+/* ── 5. Charts ── */
+.chart-tile {
+  background:var(--bg-card); border:1px solid var(--border);
+  border-radius:10px; padding:14px 16px;
+}
+.chart-tile-label { font-size:11px; color:var(--muted); margin-bottom:10px; }
+.mini-donut { position:relative; width:64px; height:64px; }
+.mini-donut svg { transform:rotate(-90deg); }
+.mini-donut-center { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:700; color:var(--text); }
+.progress-stack { display:flex; flex-direction:column; gap:6px; width:160px; }
+.prog-row { display:flex; align-items:center; gap:8px; }
+.prog-label { font-size:11px; color:var(--text-muted); width:52px; flex-shrink:0; }
+.prog-track { flex:1; height:5px; background:var(--bg-hover); border-radius:3px; }
+.prog-fill  { height:5px; border-radius:3px; }
+.prog-val   { font-size:10.5px; color:var(--muted); width:28px; text-align:right; flex-shrink:0; }
+
+.funnel-mini { display:flex; flex-direction:column; gap:4px; width:120px; }
+.funnel-step { display:flex; flex-direction:column; align-items:center; gap:2px; }
+.funnel-bar { border-radius:3px; height:18px; display:flex; align-items:center; justify-content:center; font-size:9.5px; font-weight:600; color:#fff; white-space:nowrap; }
+.funnel-step-label { font-size:9.5px; color:var(--muted); }
+
+/* ── 6. Navigation ── */
+.nav-tabs {
+  display:flex; background:var(--bg-hover); border:1px solid var(--border);
+  border-radius:8px; padding:3px; gap:2px;
+}
+.nav-tab {
+  padding:5px 12px; font-size:12px; border-radius:6px;
+  color:var(--text-muted); cursor:pointer; white-space:nowrap;
+}
+.nav-tab.active { background:var(--bg-card); color:var(--text); font-weight:600; box-shadow:0 1px 3px rgba(0,0,0,.3); }
+.period-tabs {
+  display:flex; background:var(--bg-hover); border:1px solid var(--border);
+  border-radius:7px; padding:2px; gap:1px;
+}
+.period-tab { padding:4px 10px; font-size:11px; border-radius:5px; color:var(--text-muted); cursor:pointer; }
+.period-tab.active { background:var(--bg-card); color:var(--text); font-weight:600; }
+.vp-switcher { display:flex; background:var(--bg-hover); border:1px solid var(--border); border-radius:7px; padding:3px; gap:2px; }
+.vp-btn2 { width:30px; height:28px; border-radius:5px; display:flex; align-items:center; justify-content:center; color:var(--muted); cursor:pointer; }
+.vp-btn2.active { background:var(--bg-card); color:var(--text); }
+.nav-breadcrumb { display:flex; align-items:center; gap:6px; font-size:12px; }
+.nb-item { color:var(--text-muted); }
+.nb-item.active { color:var(--text); font-weight:500; }
+.nb-sep { color:var(--muted); font-size:10px; }
+.search-input {
+  display:flex; align-items:center; gap:8px;
+  background:var(--bg-card); border:1px solid var(--border);
+  border-radius:8px; padding:7px 12px; font-size:12px; color:var(--text-muted);
+  width:200px;
+}
+.domain-badge {
+  font-size:11px; color:var(--text-muted);
+  padding:4px 10px; border:1px solid var(--border);
+  border-radius:6px; background:var(--bg-card);
+  display:flex; align-items:center; gap:5px;
+}
+.domain-dot { width:6px; height:6px; border-radius:50%; background:#3fb950; flex-shrink:0; }
+</style>
+
+<div class="screen" id="s6">
+  <!-- topbar -->
+  <div style="background:var(--bg-card);border-bottom:1px solid var(--border);padding:0 20px;display:flex;align-items:center;justify-content:space-between;height:48px;gap:16px">
+    <div style="display:flex;align-items:center;gap:8px">
+      <div style="width:22px;height:22px;background:#2F81F7;border-radius:5px;display:flex;align-items:center;justify-content:center">
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M1 9l2.5-3.5L6 8l2.5-4L11 7" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+      Umbrave
+    </div>
+    <div style="font-size:12.5px;color:var(--text-muted)">UI Component Reference · Umbrave Design System</div>
+    <div style="display:flex;align-items:center;gap:8px">
+      <span class="badge badge-info">v1.0</span>
+      <div style="width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,#2F81F7,#8957e5);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:#fff">AV</div>
+    </div>
+  </div>
+
+  <div class="comp-page">
+    <div class="comp-page-header">
+      <div>
+        <div class="comp-page-title">UI Components</div>
+        <div class="comp-page-sub">Building blocks extracted from all 5 screens — use directly in Figma or Framer</div>
+      </div>
+      <div style="font-size:11px;color:var(--muted)">6 groups · 40+ components</div>
+    </div>
+
+    <!-- ─── GROUP 1: Buttons & Actions ─── -->
+    <div class="comp-group">
+      <div class="comp-group-label">
+        <div class="comp-group-name">Buttons & Actions</div>
+        <div class="comp-group-desc">All interactive button variants. Primary for main CTA, Ghost for secondary, Danger for destructive actions.</div>
+        <div class="comp-group-pages">
+          <span class="comp-page-tag">All screens</span>
+          <span class="comp-page-tag">Integrations</span>
+          <span class="comp-page-tag">Navbar</span>
+        </div>
+      </div>
+      <div class="comp-items" style="flex-direction:column;gap:16px">
+        <div style="display:flex;flex-wrap:wrap;align-items:center;gap:8px">
+          <div class="comp-row-label" style="width:100%">Variants</div>
+          <button class="cb cb-primary cb-sm">Connect</button>
+          <button class="cb cb-ghost cb-sm">Cancel</button>
+          <button class="cb cb-danger cb-sm">Disconnect</button>
+          <button class="cb cb-success cb-sm">
+            <svg width="11" height="11" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 6l3 3 5-5"/></svg>
+            Saved
+          </button>
+          <div class="comp-divider-v"></div>
+          <button class="cb cb-ghost cb-icon">
+            <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="6.5" cy="6.5" r="5"/><path d="M4 6.5h5M6.5 4v5"/></svg>
+          </button>
+          <button class="cb cb-ghost cb-icon">
+            <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 4h9M2 7h6M2 10h4"/></svg>
+          </button>
+          <button class="cb cb-ghost cb-icon">
+            <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="6.5" cy="6.5" r="1"/><circle cx="6.5" cy="2.5" r="1"/><circle cx="6.5" cy="10.5" r="1"/></svg>
+          </button>
+        </div>
+        <div style="display:flex;flex-wrap:wrap;align-items:center;gap:8px">
+          <div class="comp-row-label" style="width:100%">Sizes</div>
+          <button class="cb cb-primary cb-xs">Export</button>
+          <button class="cb cb-primary cb-sm">Export data</button>
+          <button class="cb cb-primary cb-lg">Export report</button>
+          <div class="comp-divider-v"></div>
+          <button class="cb cb-ghost cb-xs" style="opacity:.4;cursor:default">Disabled</button>
+          <button class="cb cb-primary cb-sm" style="opacity:.4;cursor:default">Disabled</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ─── GROUP 2: Metric Tiles ─── -->
+    <div class="comp-group">
+      <div class="comp-group-label">
+        <div class="comp-group-name">Metric Tiles</div>
+        <div class="comp-group-desc">KPI cards with value, delta indicator and optional sparkline. Core unit of all dashboard screens.</div>
+        <div class="comp-group-pages">
+          <span class="comp-page-tag">Screen 1 — Overview</span>
+          <span class="comp-page-tag">Screen 4 — Growth</span>
+        </div>
+      </div>
+      <div class="comp-items">
+        <!-- Big KPI -->
+        <div class="mt" style="min-width:148px">
+          <div class="mt-label">Unique visitors</div>
+          <div class="mt-value">24,819</div>
+          <div class="mt-delta mt-delta-up">↑ 12.4% vs last week</div>
+          <div class="mt-spark">
+            <svg width="120" height="28" viewBox="0 0 120 28">
+              <polyline class="spark-up" stroke-width="1.5" points="0,24 15,20 30,22 45,16 60,14 75,10 90,8 105,5 120,4"/>
+            </svg>
+          </div>
+        </div>
+        <!-- Down delta -->
+        <div class="mt" style="min-width:148px">
+          <div class="mt-label">Bounce rate</div>
+          <div class="mt-value">38.2<span style="font-size:14px;font-weight:500;color:var(--muted)">%</span></div>
+          <div class="mt-delta mt-delta-down">↓ 3.1% vs last week</div>
+          <div class="mt-spark">
+            <svg width="120" height="28" viewBox="0 0 120 28">
+              <polyline class="spark-down" stroke-width="1.5" points="0,6 15,8 30,7 45,12 60,14 75,16 90,18 105,20 120,22"/>
+            </svg>
+          </div>
+        </div>
+        <!-- Neutral -->
+        <div class="mt" style="min-width:148px">
+          <div class="mt-label">Avg. session</div>
+          <div class="mt-value">2<span style="font-size:14px;font-weight:500;color:var(--muted)">m</span> 41<span style="font-size:14px;font-weight:500;color:var(--muted)">s</span></div>
+          <div class="mt-delta mt-delta-neu">→ No change</div>
+          <div class="mt-spark">
+            <svg width="120" height="28" viewBox="0 0 120 28">
+              <polyline class="spark-flat" stroke-width="1.5" points="0,14 15,13 30,15 45,14 60,13 75,15 90,14 105,14 120,13"/>
+            </svg>
+          </div>
+        </div>
+        <!-- Compliance mini -->
+        <div class="mt" style="min-width:120px">
+          <div class="mt-label">Compliance</div>
+          <div style="display:flex;align-items:baseline;gap:4px">
+            <div class="mt-value-sm">GDPR</div>
+            <span class="badge badge-live" style="font-size:9px;padding:1px 6px">OK</span>
+          </div>
+          <div style="display:flex;align-items:baseline;gap:4px;margin-top:6px">
+            <div class="mt-value-sm">CCPA</div>
+            <span class="badge badge-live" style="font-size:9px;padding:1px 6px">OK</span>
+          </div>
+          <div style="display:flex;align-items:baseline;gap:4px;margin-top:6px">
+            <div class="mt-value-sm">PECR</div>
+            <span class="badge badge-warn" style="font-size:9px;padding:1px 6px">Review</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ─── GROUP 3: Badges & Status ─── -->
+    <div class="comp-group">
+      <div class="comp-group-label">
+        <div class="comp-group-name">Badges & Status</div>
+        <div class="comp-group-desc">Used to communicate state — live indicators, connection health, content tags and numeric deltas.</div>
+        <div class="comp-group-pages">
+          <span class="comp-page-tag">Screen 3 — Live</span>
+          <span class="comp-page-tag">Screen 5 — Integrations</span>
+          <span class="comp-page-tag">Overview</span>
+        </div>
+      </div>
+      <div class="comp-items" style="flex-direction:column;gap:14px">
+        <div style="display:flex;flex-wrap:wrap;align-items:center;gap:8px">
+          <div class="comp-row-label" style="width:100%">Status badges</div>
+          <span class="badge badge-live badge-dot">Live</span>
+          <span class="badge badge-live">Connected</span>
+          <span class="badge badge-warn badge-dot">Review</span>
+          <span class="badge badge-error badge-dot">Anomaly</span>
+          <span class="badge badge-info">Available</span>
+          <span class="badge badge-muted">Coming soon</span>
+          <span class="badge badge-purple">Beta</span>
+          <span class="badge badge-info">Popular</span>
+        </div>
+        <div style="display:flex;flex-wrap:wrap;align-items:center;gap:8px">
+          <div class="comp-row-label" style="width:100%">Delta chips</div>
+          <span class="delta-chip delta-chip-up">↑ 14.2%</span>
+          <span class="delta-chip delta-chip-up">↑ 2.1k</span>
+          <span class="delta-chip delta-chip-down">↓ 3.8%</span>
+          <span class="delta-chip delta-chip-down">↓ 410</span>
+          <span class="delta-chip delta-chip-neu">→ 0.2%</span>
+          <div class="comp-divider-v"></div>
+          <span style="font-size:11px;font-weight:600;padding:3px 8px;border-radius:6px;background:rgba(47,129,247,.1);color:#2F81F7;border:1px solid rgba(47,129,247,.2)">#privacy</span>
+          <span style="font-size:11px;font-weight:600;padding:3px 8px;border-radius:6px;background:rgba(163,113,247,.1);color:#a371f7;border:1px solid rgba(163,113,247,.2)">#analytics</span>
+          <span style="font-size:11px;font-weight:600;padding:3px 8px;border-radius:6px;background:rgba(63,185,80,.1);color:#3fb950;border:1px solid rgba(63,185,80,.2)">#gdpr</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ─── GROUP 4: Data Rows ─── -->
+    <div class="comp-group">
+      <div class="comp-group-label">
+        <div class="comp-group-name">Data Rows</div>
+        <div class="comp-group-desc">Ranked list items used in traffic sources, country breakdown, pages report and event feed.</div>
+        <div class="comp-group-pages">
+          <span class="comp-page-tag">Screen 2 — Sources</span>
+          <span class="comp-page-tag">Screen 3 — Live</span>
+          <span class="comp-page-tag">Screen 1</span>
+        </div>
+      </div>
+      <div class="comp-items" style="gap:16px">
+        <!-- Source rows -->
+        <div class="data-row-wrap" style="min-width:260px">
+          <div data-row-type="header" style="padding:8px 14px;font-size:10px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;border-bottom:1px solid var(--border)">Traffic sources</div>
+          <div class="data-row">
+            <span class="dr-rank">1</span>
+            <div class="dr-icon" style="background:rgba(255,87,34,.1)">🔍</div>
+            <span class="dr-label">Organic search</span>
+            <div class="dr-bar-wrap"><div class="dr-bar" style="width:82%"></div></div>
+            <span class="dr-value">8,241</span>
+          </div>
+          <div class="data-row">
+            <span class="dr-rank">2</span>
+            <div class="dr-icon" style="background:rgba(47,129,247,.1)">🔗</div>
+            <span class="dr-label">Direct</span>
+            <div class="dr-bar-wrap"><div class="dr-bar" style="width:61%;background:#8957e5"></div></div>
+            <span class="dr-value">6,104</span>
+          </div>
+          <div class="data-row">
+            <span class="dr-rank">3</span>
+            <div class="dr-icon" style="background:rgba(63,185,80,.1)">📣</div>
+            <span class="dr-label">Social</span>
+            <div class="dr-bar-wrap"><div class="dr-bar" style="width:38%;background:#3fb950"></div></div>
+            <span class="dr-value">3,812</span>
+          </div>
+        </div>
+        <!-- Country rows -->
+        <div class="data-row-wrap" style="min-width:220px">
+          <div data-row-type="header" style="padding:8px 14px;font-size:10px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;border-bottom:1px solid var(--border)">Countries</div>
+          <div class="data-row">
+            <span class="dr-flag">🇺🇸</span>
+            <span class="dr-label">United States</span>
+            <div class="dr-bar-wrap"><div class="dr-bar" style="width:78%"></div></div>
+            <span class="dr-value">34%</span>
+          </div>
+          <div class="data-row">
+            <span class="dr-flag">🇩🇪</span>
+            <span class="dr-label">Germany</span>
+            <div class="dr-bar-wrap"><div class="dr-bar" style="width:44%"></div></div>
+            <span class="dr-value">18%</span>
+          </div>
+          <div class="data-row">
+            <span class="dr-flag">🇬🇧</span>
+            <span class="dr-label">United Kingdom</span>
+            <div class="dr-bar-wrap"><div class="dr-bar" style="width:29%"></div></div>
+            <span class="dr-value">12%</span>
+          </div>
+        </div>
+        <!-- Event feed -->
+        <div class="event-feed-wrap" style="min-width:220px">
+          <div data-row-type="header" style="padding:8px 12px;font-size:10px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;border-bottom:1px solid var(--border)">Event feed</div>
+          <div class="event-item">
+            <div class="ev-dot" style="background:#3fb950"></div>
+            <div class="ev-text"><strong>Sign up</strong> — pricing page</div>
+            <div class="ev-time">0s</div>
+          </div>
+          <div class="event-item">
+            <div class="ev-dot" style="background:#2F81F7"></div>
+            <div class="ev-text"><strong>Page view</strong> — /docs/api</div>
+            <div class="ev-time">3s</div>
+          </div>
+          <div class="event-item">
+            <div class="ev-dot" style="background:#f85149"></div>
+            <div class="ev-text"><strong>Exit</strong> — /pricing</div>
+            <div class="ev-time">8s</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ─── GROUP 5: Charts & Visualizations ─── -->
+    <div class="comp-group">
+      <div class="comp-group-label">
+        <div class="comp-group-name">Charts & Viz</div>
+        <div class="comp-group-desc">Inline chart widgets — sparklines, progress bars, mini donut, funnel steps and bar groups.</div>
+        <div class="comp-group-pages">
+          <span class="comp-page-tag">Screen 2 — Funnel</span>
+          <span class="comp-page-tag">Screen 3 — Live</span>
+          <span class="comp-page-tag">Screen 4</span>
+        </div>
+      </div>
+      <div class="comp-items" style="gap:16px;align-items:flex-start">
+        <!-- Sparklines -->
+        <div class="chart-tile" style="min-width:160px">
+          <div class="chart-tile-label">Sparklines</div>
+          <div style="display:flex;flex-direction:column;gap:10px">
+            <div style="display:flex;align-items:center;gap:8px">
+              <svg width="100" height="28" viewBox="0 0 100 28"><polyline class="spark-up" stroke-width="1.5" points="0,22 20,18 40,16 60,10 80,6 100,3"/></svg>
+              <span class="delta-chip delta-chip-up">↑ 12%</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:8px">
+              <svg width="100" height="28" viewBox="0 0 100 28"><polyline class="spark-down" stroke-width="1.5" points="0,4 20,7 40,9 60,14 80,18 100,24"/></svg>
+              <span class="delta-chip delta-chip-down">↓ 8%</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:8px">
+              <svg width="100" height="28" viewBox="0 0 100 28"><polyline class="spark-flat" stroke-width="1.5" points="0,14 20,13 40,15 60,14 80,13 100,14"/></svg>
+              <span class="delta-chip delta-chip-neu">→ 0%</span>
+            </div>
+          </div>
+        </div>
+        <!-- Progress bars -->
+        <div class="chart-tile">
+          <div class="chart-tile-label">Progress bars</div>
+          <div class="progress-stack">
+            <div class="prog-row">
+              <span class="prog-label">Chrome</span>
+              <div class="prog-track"><div class="prog-fill" style="width:72%;background:#2F81F7"></div></div>
+              <span class="prog-val">72%</span>
+            </div>
+            <div class="prog-row">
+              <span class="prog-label">Safari</span>
+              <div class="prog-track"><div class="prog-fill" style="width:18%;background:#8957e5"></div></div>
+              <span class="prog-val">18%</span>
+            </div>
+            <div class="prog-row">
+              <span class="prog-label">Firefox</span>
+              <div class="prog-track"><div class="prog-fill" style="width:7%;background:#3fb950"></div></div>
+              <span class="prog-val">7%</span>
+            </div>
+            <div class="prog-row">
+              <span class="prog-label">Other</span>
+              <div class="prog-track"><div class="prog-fill" style="width:3%;background:#8b949e"></div></div>
+              <span class="prog-val">3%</span>
+            </div>
+          </div>
+        </div>
+        <!-- Mini donut -->
+        <div class="chart-tile" style="display:flex;flex-direction:column;align-items:center;gap:10px">
+          <div class="chart-tile-label">Donut</div>
+          <div class="mini-donut">
+            <svg width="64" height="64" viewBox="0 0 64 64">
+              <circle cx="32" cy="32" r="24" fill="none" stroke="#30363d" stroke-width="8"/>
+              <circle cx="32" cy="32" r="24" fill="none" stroke="#2F81F7" stroke-width="8" stroke-dasharray="108 43" stroke-linecap="round"/>
+              <circle cx="32" cy="32" r="24" fill="none" stroke="#8957e5" stroke-width="8" stroke-dasharray="26 125" stroke-dashoffset="-108" stroke-linecap="round"/>
+            </svg>
+            <div class="mini-donut-center">72%</div>
+          </div>
+          <div style="display:flex;gap:8px">
+            <span style="font-size:10px;color:var(--text-muted);display:flex;align-items:center;gap:3px"><span style="width:7px;height:7px;border-radius:50%;background:#2F81F7;display:inline-block"></span>Direct</span>
+            <span style="font-size:10px;color:var(--text-muted);display:flex;align-items:center;gap:3px"><span style="width:7px;height:7px;border-radius:50%;background:#8957e5;display:inline-block"></span>Ref</span>
+          </div>
+        </div>
+        <!-- Funnel mini -->
+        <div class="chart-tile">
+          <div class="chart-tile-label">Funnel steps</div>
+          <div class="funnel-mini">
+            <div class="funnel-step">
+              <div class="funnel-bar" style="width:112px;background:#2F81F7">Visits</div>
+              <span class="funnel-step-label">12,400</span>
+            </div>
+            <div class="funnel-step">
+              <div class="funnel-bar" style="width:84px;background:#8957e5">Signup</div>
+              <span class="funnel-step-label">6,820</span>
+            </div>
+            <div class="funnel-step">
+              <div class="funnel-bar" style="width:52px;background:#3fb950">Trial</div>
+              <span class="funnel-step-label">2,340</span>
+            </div>
+            <div class="funnel-step">
+              <div class="funnel-bar" style="width:28px;background:#d4a017">Paid</div>
+              <span class="funnel-step-label">580</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ─── GROUP 6: Navigation ─── -->
+    <div class="comp-group">
+      <div class="comp-group-label">
+        <div class="comp-group-name">Navigation</div>
+        <div class="comp-group-desc">Tab bars, period selectors, viewport switcher, search input, domain badge and breadcrumbs.</div>
+        <div class="comp-group-pages">
+          <span class="comp-page-tag">All screens — topbar</span>
+          <span class="comp-page-tag">Screen 5</span>
+        </div>
+      </div>
+      <div class="comp-items" style="flex-direction:column;gap:16px">
+        <div style="display:flex;flex-wrap:wrap;align-items:center;gap:10px">
+          <div class="comp-row-label" style="width:100%">Tab bars</div>
+          <div class="nav-tabs">
+            <div class="nav-tab active">Overview</div>
+            <div class="nav-tab">Sources</div>
+            <div class="nav-tab">Funnels</div>
+            <div class="nav-tab">Integrations</div>
+          </div>
+          <div class="comp-divider-v"></div>
+          <div class="period-tabs">
+            <div class="period-tab">Today</div>
+            <div class="period-tab active">7D</div>
+            <div class="period-tab">30D</div>
+            <div class="period-tab">90D</div>
+          </div>
+          <div class="comp-divider-v"></div>
+          <div class="vp-switcher">
+            <div class="vp-btn2 active">
+              <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="1" y="3" width="12" height="8" rx="1.5"/></svg>
+            </div>
+            <div class="vp-btn2">
+              <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="1" width="8" height="12" rx="1.5"/></svg>
+            </div>
+            <div class="vp-btn2">
+              <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="4" y="1" width="6" height="12" rx="1.5"/></svg>
+            </div>
+          </div>
+        </div>
+        <div style="display:flex;flex-wrap:wrap;align-items:center;gap:10px">
+          <div class="comp-row-label" style="width:100%">Inputs & labels</div>
+          <div class="search-input">
+            <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="5.5" cy="5.5" r="4"/><path d="M10 10l-2-2"/></svg>
+            Search integrations…
+          </div>
+          <div class="domain-badge">
+            <div class="domain-dot"></div>
+            app.umbrave.io
+          </div>
+          <div class="comp-divider-v"></div>
+          <div class="nav-breadcrumb">
+            <span class="nb-item">Dashboard</span>
+            <span class="nb-sep">›</span>
+            <span class="nb-item">Settings</span>
+            <span class="nb-sep">›</span>
+            <span class="nb-item active">Integrations</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /comp-page -->
+</div><!-- /s6 -->
