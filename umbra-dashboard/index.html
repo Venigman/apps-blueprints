@@ -468,6 +468,7 @@ body {
   <div class="screen-tabs">
     <button class="tab-btn active" onclick="show(1,this)">Screen 1 — Overview</button>
     <button class="tab-btn" onclick="show(2,this)">Screen 2 — Sources & Funnel</button>
+    <button class="tab-btn" onclick="show(3,this)">Screen 3 — Live Right Now</button>
   </div>
 </div>
 
@@ -901,16 +902,126 @@ body {
 </div>
 </div>
 
+<!-- ══════════════════════════════════════════
+     SCREEN 3 — Live Right Now
+══════════════════════════════════════════ -->
+<div class="screen" id="s3">
+<div class="dashboard">
+
+  <!-- Topbar -->
+  <div class="topbar">
+    <div class="topbar-logo">
+      <div class="logo-dot">
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M1 9l2.5-3.5L6 8l2.5-4L11 7" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+      Umbra
+    </div>
+    <div style="display:flex;align-items:center;gap:8px;background:rgba(63,185,80,.1);border:1px solid rgba(63,185,80,.2);border-radius:999px;padding:5px 14px">
+      <div style="width:7px;height:7px;border-radius:50%;background:#3fb950;box-shadow:0 0 8px #3fb950;animation:pulse 1.8s ease-in-out infinite"></div>
+      <span style="font-size:12px;font-weight:600;color:#3fb950" id="live-count">148</span>
+      <span style="font-size:12px;color:#8b949e">visitors online right now</span>
+    </div>
+    <div class="topbar-right">
+      <div class="site-select">
+        <div class="dot-online"></div>
+        mysite.com
+        <svg width="10" height="10" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 4l4 4 4-4"/></svg>
+      </div>
+      <div class="avatar">JD</div>
+    </div>
+  </div>
+
+  <!-- 3-column layout -->
+  <div style="display:grid;grid-template-columns:1fr 1.1fr 1fr;min-height:460px">
+
+    <!-- COL 1: Event stream -->
+    <div style="border-right:1px solid var(--border);display:flex;flex-direction:column">
+      <div style="padding:13px 18px;border-bottom:1px solid var(--border-sub);display:flex;align-items:center;justify-content:space-between">
+        <span style="font-size:13px;font-weight:600;color:var(--text)">Live Event Stream</span>
+        <span style="font-size:10px;font-family:var(--mono);color:var(--green);background:var(--green-dim);border:1px solid rgba(63,185,80,.2);border-radius:999px;padding:2px 8px">● live</span>
+      </div>
+      <div id="event-feed" style="flex:1;overflow:hidden;padding:8px 0;display:flex;flex-direction:column;gap:0"></div>
+    </div>
+
+    <!-- COL 2: Center — live counter + 30min chart + active pages -->
+    <div style="border-right:1px solid var(--border);display:flex;flex-direction:column">
+
+      <!-- Big live number -->
+      <div style="padding:20px 20px 16px;border-bottom:1px solid var(--border-sub);text-align:center">
+        <div style="font-size:11px;color:var(--text-3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px">Visitors last 30 minutes</div>
+        <div style="font-size:52px;font-weight:800;color:var(--text);letter-spacing:-.04em;line-height:1;font-variant-numeric:tabular-nums" id="mini-count">1,842</div>
+        <div style="font-size:12px;color:var(--green);margin-top:6px;display:flex;align-items:center;justify-content:center;gap:4px">
+          <svg width="10" height="10" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 8V2M2 5l3-3 3 3"/></svg>
+          +8.3% vs same time yesterday
+        </div>
+      </div>
+
+      <!-- 30min sparkline -->
+      <div style="padding:12px 18px 8px;border-bottom:1px solid var(--border-sub)">
+        <div style="font-size:11px;color:var(--text-3);margin-bottom:6px">Visitors per minute · last 30 min</div>
+        <div style="height:56px;position:relative"><canvas id="c3spark"></canvas></div>
+        <div style="display:flex;justify-content:space-between;margin-top:4px">
+          <span style="font-size:10px;color:var(--text-3)">30 min ago</span>
+          <span style="font-size:10px;color:var(--text-3)">Now</span>
+        </div>
+      </div>
+
+      <!-- Active pages -->
+      <div style="padding:12px 18px;flex:1">
+        <div style="font-size:11px;font-weight:600;color:var(--text-2);margin-bottom:10px">Active pages right now</div>
+        <div style="display:flex;flex-direction:column;gap:8px" id="active-pages">
+          <div class="hbar"><span class="hbar-label" style="font-family:var(--mono)">/pricing</span><div class="hbar-track"><div class="hbar-fill" style="width:62%"></div></div><span class="hbar-val">62</span></div>
+          <div class="hbar"><span class="hbar-label" style="font-family:var(--mono)">/</span><div class="hbar-track"><div class="hbar-fill" style="width:48%"></div></div><span class="hbar-val">48</span></div>
+          <div class="hbar"><span class="hbar-label" style="font-family:var(--mono)">/docs</span><div class="hbar-track"><div class="hbar-fill" style="width:26%"></div></div><span class="hbar-val">26</span></div>
+          <div class="hbar"><span class="hbar-label" style="font-family:var(--mono)">/blog/cookie-free</span><div class="hbar-track"><div class="hbar-fill" style="width:14%"></div></div><span class="hbar-val">14</span></div>
+          <div class="hbar"><span class="hbar-label" style="font-family:var(--mono)">/integrations</span><div class="hbar-track"><div class="hbar-fill" style="width:8%"></div></div><span class="hbar-val">8</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- COL 3: Goals + top sources right now -->
+    <div style="display:flex;flex-direction:column">
+
+      <!-- Recent goals -->
+      <div style="padding:13px 18px;border-bottom:1px solid var(--border-sub)">
+        <div style="font-size:13px;font-weight:600;color:var(--text);margin-bottom:12px">Recent Conversions</div>
+        <div style="display:flex;flex-direction:column;gap:8px" id="goal-feed"></div>
+      </div>
+
+      <!-- Current sources -->
+      <div style="padding:13px 18px;border-bottom:1px solid var(--border-sub);flex:1">
+        <div style="font-size:11px;font-weight:600;color:var(--text-2);margin-bottom:10px">Sources right now</div>
+        <div style="display:flex;flex-direction:column;gap:7px">
+          <div class="hbar"><span class="hbar-label">🔍 Organic</span><div class="hbar-track"><div class="hbar-fill" style="width:44%"></div></div><span class="hbar-val">44%</span></div>
+          <div class="hbar"><span class="hbar-label">🔗 Direct</span><div class="hbar-track"><div class="hbar-fill" style="width:29%"></div></div><span class="hbar-val">29%</span></div>
+          <div class="hbar"><span class="hbar-label">↗ Referral</span><div class="hbar-track"><div class="hbar-fill" style="width:16%"></div></div><span class="hbar-val">16%</span></div>
+          <div class="hbar"><span class="hbar-label">📱 Social</span><div class="hbar-track"><div class="hbar-fill" style="width:11%"></div></div><span class="hbar-val">11%</span></div>
+        </div>
+      </div>
+
+      <!-- Privacy notice -->
+      <div style="padding:14px 18px;background:rgba(63,185,80,.04);border-top:1px solid rgba(63,185,80,.1)">
+        <div style="font-size:11px;font-weight:600;color:var(--green);margin-bottom:6px">✓ Zero personal data collected</div>
+        <div style="font-size:11px;color:var(--text-3);line-height:1.6">No IPs · No cookies · No fingerprinting.<br>All data is anonymous and aggregated.</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+</div>
+
 <div class="footnote">apps-blueprints · umbra-dashboard · for Figma design reference</div>
 
 <script>
 // Screen switch
 function show(n, btn) {
+  stopS3()
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'))
   document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'))
   document.getElementById('s' + n).classList.add('active')
   btn.classList.add('active')
-  setTimeout(initCharts, 50)
+  if (n === 3) { setTimeout(startS3, 80) }
+  else setTimeout(initCharts, 50)
 }
 
 // Chart.js defaults
@@ -993,6 +1104,176 @@ function makeBars(id) {
 
 makeBars('compBars1')
 setTimeout(initCharts, 100)
+
+// ── Screen 3: Live animations ──────────────────────────────────────────────
+
+const EVENTS = [
+  { type:'pageview', icon:'👁', label:'Viewed', page:'/pricing',          loc:'Berlin, DE' },
+  { type:'pageview', icon:'👁', label:'Viewed', page:'/',                  loc:'Austin, US' },
+  { type:'signup',   icon:'✓',  label:'Signed up',page:'/pricing',        loc:'London, UK' },
+  { type:'pageview', icon:'👁', label:'Viewed', page:'/docs/quickstart',   loc:'Paris, FR' },
+  { type:'pageview', icon:'👁', label:'Viewed', page:'/blog/cookie-free',  loc:'Toronto, CA' },
+  { type:'goal',     icon:'⚡', label:'Started trial',page:'/signup',     loc:'Amsterdam, NL' },
+  { type:'pageview', icon:'👁', label:'Viewed', page:'/integrations',      loc:'Tokyo, JP' },
+  { type:'pageview', icon:'👁', label:'Viewed', page:'/changelog',         loc:'Sydney, AU' },
+  { type:'signup',   icon:'✓',  label:'Signed up', page:'/pricing',       loc:'NYC, US' },
+  { type:'pageview', icon:'👁', label:'Viewed', page:'/about',             loc:'Stockholm, SE' },
+  { type:'pageview', icon:'👁', label:'Viewed', page:'/',                  loc:'Munich, DE' },
+  { type:'goal',     icon:'⚡', label:'Started trial', page:'/signup',    loc:'Warsaw, PL' },
+]
+
+const GOALS = [
+  { label:'Signed up', sub:'via /pricing', time:'just now', color:'#3fb950' },
+  { label:'Started trial', sub:'via /signup', time:'2m ago', color:'#2F81F7' },
+  { label:'Signed up', sub:'via Organic', time:'5m ago', color:'#3fb950' },
+  { label:'Viewed Pricing', sub:'from github.com', time:'6m ago', color:'#d29922' },
+  { label:'Signed up', sub:'via Direct', time:'11m ago', color:'#3fb950' },
+]
+
+function renderGoals() {
+  const el = document.getElementById('goal-feed')
+  if (!el) return
+  el.innerHTML = GOALS.map(g => `
+    <div style="display:flex;align-items:flex-start;gap:10px">
+      <div style="width:7px;height:7px;border-radius:50%;background:${g.color};margin-top:4px;flex-shrink:0;box-shadow:0 0 6px ${g.color}80"></div>
+      <div style="flex:1;min-width:0">
+        <div style="font-size:12px;font-weight:500;color:var(--text)">${g.label}</div>
+        <div style="font-size:11px;color:var(--text-3)">${g.sub} · ${g.time}</div>
+      </div>
+    </div>`).join('')
+}
+
+let feedItems = []
+function pushEvent(ev) {
+  const el = document.getElementById('event-feed')
+  if (!el) return
+  const isSpecial = ev.type !== 'pageview'
+  const div = document.createElement('div')
+  div.style.cssText = `padding:8px 18px;display:flex;align-items:flex-start;gap:10px;border-bottom:1px solid var(--border-sub);opacity:0;transition:opacity .3s;background:${isSpecial ? 'rgba(47,129,247,.04)' : 'transparent'}`
+  div.innerHTML = `
+    <span style="font-size:13px;flex-shrink:0;margin-top:1px">${ev.icon}</span>
+    <div style="flex:1;min-width:0">
+      <div style="font-size:12px;color:var(--text);font-weight:${isSpecial?'600':'400'}">${ev.label} <span style="font-family:var(--mono);font-size:11px;color:${isSpecial?'var(--accent)':'var(--text-2)'}">${ev.page}</span></div>
+      <div style="font-size:11px;color:var(--text-3);margin-top:1px">${ev.loc} · just now</div>
+    </div>
+    <span style="font-size:10px;color:var(--text-3);font-family:var(--mono);flex-shrink:0;margin-top:2px">now</span>`
+  el.insertBefore(div, el.firstChild)
+  requestAnimationFrame(() => { div.style.opacity = '1' })
+  feedItems.push(div)
+  if (feedItems.length > 12) {
+    const old = feedItems.shift()
+    old.style.opacity = '0'
+    setTimeout(() => old.remove(), 300)
+  }
+}
+
+// Seed feed
+function seedFeed() {
+  const ages = ['14s','32s','1m','1m','2m','3m','4m','5m','6m','8m']
+  EVENTS.slice(0,10).forEach((ev, i) => {
+    const el = document.getElementById('event-feed')
+    if (!el) return
+    const isSpecial = ev.type !== 'pageview'
+    const div = document.createElement('div')
+    div.style.cssText = `padding:8px 18px;display:flex;align-items:flex-start;gap:10px;border-bottom:1px solid var(--border-sub);background:${isSpecial ? 'rgba(47,129,247,.04)' : 'transparent'}`
+    div.innerHTML = `
+      <span style="font-size:13px;flex-shrink:0;margin-top:1px">${ev.icon}</span>
+      <div style="flex:1;min-width:0">
+        <div style="font-size:12px;color:var(--text);font-weight:${isSpecial?'600':'400'}">${ev.label} <span style="font-family:var(--mono);font-size:11px;color:${isSpecial?'var(--accent)':'var(--text-2)'}">${ev.page}</span></div>
+        <div style="font-size:11px;color:var(--text-3);margin-top:1px">${ev.loc} · ${ages[i]||'10m'} ago</div>
+      </div>
+      <span style="font-size:10px;color:var(--text-3);font-family:var(--mono);flex-shrink:0;margin-top:2px">${ages[i]||'10m'}</span>`
+    el.appendChild(div)
+    feedItems.push(div)
+  })
+}
+
+// Live counter tick
+let liveNum = 148
+function tickCounter() {
+  liveNum += Math.floor(Math.random() * 3) - 1
+  liveNum = Math.max(130, Math.min(165, liveNum))
+  const el = document.getElementById('live-count')
+  if (el) el.textContent = liveNum
+}
+
+// 30-min sparkline
+let spark3Chart = null
+let spark3Data = Array.from({length:30}, (_,i) => 40 + Math.sin(i*0.4)*15 + Math.random()*8)
+function initSpark3() {
+  const el = document.getElementById('c3spark')
+  if (!el) return
+  if (spark3Chart) { spark3Chart.destroy(); spark3Chart = null }
+  const ctx = el.getContext('2d')
+  const grad = ctx.createLinearGradient(0, 0, 0, 60)
+  grad.addColorStop(0, '#2F81F740')
+  grad.addColorStop(1, '#2F81F700')
+  spark3Chart = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: spark3Data.map((_,i)=>i),
+      datasets:[{
+        data: spark3Data,
+        borderColor: '#2F81F7',
+        borderWidth: 1.5,
+        fill: { target:'origin', above: grad },
+        tension: 0.4,
+        pointRadius: 0,
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      animation: false,
+      plugins: { legend:{display:false}, tooltip:{enabled:false} },
+      scales: { x:{display:false}, y:{display:false, beginAtZero:true} }
+    }
+  })
+}
+
+function tickSpark3() {
+  if (!spark3Chart) return
+  spark3Data.shift()
+  spark3Data.push(40 + Math.random() * 30)
+  spark3Chart.data.datasets[0].data = spark3Data
+  spark3Chart.update('none')
+}
+
+let s3inited = false
+function initScreen3() {
+  if (s3inited) return
+  s3inited = true
+  seedFeed()
+  renderGoals()
+  setTimeout(initSpark3, 50)
+}
+
+// Auto-push events when screen 3 visible
+let s3interval = null
+function startS3() {
+  initScreen3()
+  if (s3interval) return
+  let idx = 0
+  s3interval = setInterval(() => {
+    pushEvent(EVENTS[idx % EVENTS.length])
+    tickCounter()
+    tickSpark3()
+    idx++
+  }, 2200)
+}
+function stopS3() {
+  if (s3interval) { clearInterval(s3interval); s3interval = null }
+}
+
+makeBars('compBars1')
+setTimeout(initCharts, 100)
 </script>
+
+<style>
+@keyframes pulse {
+  0%,100% { opacity:1; transform:scale(1); }
+  50% { opacity:.5; transform:scale(.8); }
+}
+</style>
 </body>
 </html>
