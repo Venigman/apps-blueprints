@@ -469,6 +469,7 @@ body {
     <button class="tab-btn active" onclick="show(1,this)">Screen 1 — Overview</button>
     <button class="tab-btn" onclick="show(2,this)">Screen 2 — Sources & Funnel</button>
     <button class="tab-btn" onclick="show(3,this)">Screen 3 — Live Right Now</button>
+    <button class="tab-btn" onclick="show(4,this)">Screen 4 — Conversion & Growth</button>
   </div>
 </div>
 
@@ -1010,6 +1011,210 @@ body {
 </div>
 </div>
 
+<!-- ══════════════════════════════════════════
+     SCREEN 4 — Conversion & Growth
+══════════════════════════════════════════ -->
+<div class="screen" id="s4">
+<div class="dashboard">
+
+  <!-- Topbar -->
+  <div class="topbar">
+    <div class="topbar-logo">
+      <div class="logo-dot">
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M1 9l2.5-3.5L6 8l2.5-4L11 7" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+      Umbra
+    </div>
+    <div class="period-group">
+      <button class="period-btn">Today</button>
+      <button class="period-btn">7D</button>
+      <button class="period-btn">30D</button>
+      <button class="period-btn active">90D</button>
+    </div>
+    <div class="topbar-right">
+      <div class="site-select"><div class="dot-online"></div>mysite.com<svg width="10" height="10" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 4l4 4 4-4"/></svg></div>
+      <div class="avatar">JD</div>
+    </div>
+  </div>
+
+  <!-- KPI strip — full width -->
+  <div style="display:grid;grid-template-columns:repeat(6,1fr);border-bottom:1px solid var(--border)">
+    <div style="padding:12px 16px;border-right:1px solid var(--border)">
+      <div style="font-size:10px;color:var(--text-3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:5px">MRR</div>
+      <div style="font-size:18px;font-weight:700;color:var(--text);letter-spacing:-.02em">$12,840</div>
+      <div style="font-size:11px;color:var(--green);margin-top:3px">↑ 18.4%</div>
+    </div>
+    <div style="padding:12px 16px;border-right:1px solid var(--border)">
+      <div style="font-size:10px;color:var(--text-3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:5px">New Trials</div>
+      <div style="font-size:18px;font-weight:700;color:var(--text);letter-spacing:-.02em">312</div>
+      <div style="font-size:11px;color:var(--green);margin-top:3px">↑ 8.2%</div>
+    </div>
+    <div style="padding:12px 16px;border-right:1px solid var(--border)">
+      <div style="font-size:10px;color:var(--text-3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:5px">Conv. Rate</div>
+      <div style="font-size:18px;font-weight:700;color:var(--text);letter-spacing:-.02em">1.26%</div>
+      <div style="font-size:11px;color:var(--green);margin-top:3px">↑ 0.4%</div>
+    </div>
+    <div style="padding:12px 16px;border-right:1px solid var(--border)">
+      <div style="font-size:10px;color:var(--text-3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:5px">ARPU</div>
+      <div style="font-size:18px;font-weight:700;color:var(--text);letter-spacing:-.02em">$41.2</div>
+      <div style="font-size:11px;color:var(--green);margin-top:3px">↑ 2.1%</div>
+    </div>
+    <div style="padding:12px 16px;border-right:1px solid var(--border)">
+      <div style="font-size:10px;color:var(--text-3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:5px">Churn</div>
+      <div style="font-size:18px;font-weight:700;color:var(--text);letter-spacing:-.02em">2.1%</div>
+      <div style="font-size:11px;color:var(--green);margin-top:3px">↓ 0.3%</div>
+    </div>
+    <div style="padding:12px 16px">
+      <div style="font-size:10px;color:var(--text-3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:5px">LTV</div>
+      <div style="font-size:18px;font-weight:700;color:var(--text);letter-spacing:-.02em">$1,960</div>
+      <div style="font-size:11px;color:var(--green);margin-top:3px">↑ 12.0%</div>
+    </div>
+  </div>
+
+  <!-- 3-column body -->
+  <div style="display:grid;grid-template-columns:22% 1fr 28%;min-height:390px">
+
+    <!-- LEFT: Vertical funnel -->
+    <div style="border-right:1px solid var(--border);padding:16px;display:flex;flex-direction:column;gap:4px">
+      <div style="font-size:13px;font-weight:600;color:var(--text);margin-bottom:10px">Conversion Funnel · 90 Days</div>
+
+      <!-- Funnel steps as trapezoids via CSS clip-path -->
+      <div style="display:flex;flex-direction:column;gap:3px;flex:1;justify-content:center">
+
+        <div style="background:var(--accent);border-radius:4px 4px 0 0;padding:10px 14px;position:relative">
+          <div style="font-size:11px;color:rgba(255,255,255,.7)">Landed</div>
+          <div style="font-size:20px;font-weight:800;color:#fff;letter-spacing:-.02em">24,831</div>
+          <div style="font-size:11px;color:rgba(255,255,255,.6)">100%</div>
+        </div>
+        <div style="height:8px;background:linear-gradient(to bottom, var(--accent), #1a5bc4);clip-path:polygon(5% 0%, 95% 0%, 90% 100%, 10% 100%)"></div>
+
+        <div style="background:#1a4a8a;border-radius:0;padding:10px 14px">
+          <div style="font-size:11px;color:rgba(255,255,255,.6)">Engaged &gt;30s</div>
+          <div style="font-size:18px;font-weight:700;color:#fff;letter-spacing:-.02em">16,100</div>
+          <div style="font-size:11px;color:rgba(255,255,255,.5)">64.8% <span style="color:var(--green)">↑ 2.1%</span></div>
+        </div>
+        <div style="height:8px;background:linear-gradient(to bottom, #1a4a8a, #133870);clip-path:polygon(8% 0%, 92% 0%, 84% 100%, 16% 100%)"></div>
+
+        <div style="background:#133870;padding:10px 14px">
+          <div style="font-size:11px;color:rgba(255,255,255,.6)">Viewed Pricing</div>
+          <div style="font-size:18px;font-weight:700;color:#fff;letter-spacing:-.02em">4,200</div>
+          <div style="font-size:11px;color:rgba(255,255,255,.5)">16.9% <span style="color:var(--green)">↑ 5.3%</span></div>
+        </div>
+        <div style="height:8px;background:linear-gradient(to bottom,#133870,#0d2550);clip-path:polygon(14% 0%, 86% 0%, 76% 100%, 24% 100%)"></div>
+
+        <div style="background:#0d2550;border-radius:0 0 4px 4px;padding:10px 14px">
+          <div style="font-size:11px;color:rgba(255,255,255,.6)">Signed Up</div>
+          <div style="font-size:18px;font-weight:800;color:var(--green);letter-spacing:-.02em">312</div>
+          <div style="font-size:11px;color:rgba(255,255,255,.5)">1.26% <span style="color:var(--green)">↑ 0.4%</span></div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- CENTER: Big 90-day chart -->
+    <div style="border-right:1px solid var(--border);padding:16px 20px;display:flex;flex-direction:column">
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:12px">
+        <div>
+          <div style="font-size:13px;font-weight:600;color:var(--text)">Growth · Last 90 Days</div>
+          <div style="font-size:11px;color:var(--text-3);margin-top:2px">Unique visitors + signups</div>
+        </div>
+        <div style="display:flex;gap:14px;align-items:center">
+          <div style="display:flex;align-items:center;gap:5px"><div style="width:10px;height:2px;background:var(--accent);border-radius:999px"></div><span style="font-size:11px;color:var(--text-2)">Visitors</span></div>
+          <div style="display:flex;align-items:center;gap:5px"><div style="width:10px;height:2px;background:var(--green);border-radius:999px"></div><span style="font-size:11px;color:var(--text-2)">Signups</span></div>
+        </div>
+      </div>
+      <div style="flex:1;min-height:200px;position:relative">
+        <canvas id="c4growth"></canvas>
+      </div>
+      <div style="display:flex;justify-content:space-between;margin-top:6px">
+        <span style="font-size:10px;color:var(--text-3)">Feb 24</span>
+        <span style="font-size:10px;color:var(--text-3)">Mar 15</span>
+        <span style="font-size:10px;color:var(--text-3)">Apr 1</span>
+        <span style="font-size:10px;color:var(--text-3)">Apr 20</span>
+        <span style="font-size:10px;color:var(--text-3)">May 10</span>
+        <span style="font-size:10px;color:var(--text-3)">May 24</span>
+      </div>
+    </div>
+
+    <!-- RIGHT: Treemap — pages by conversion rate -->
+    <div style="display:flex;flex-direction:column">
+      <div style="padding:13px 16px 10px;border-bottom:1px solid var(--border-sub)">
+        <div style="font-size:13px;font-weight:600;color:var(--text)">Pages by Conversion</div>
+        <div style="font-size:11px;color:var(--text-3);margin-top:2px">Size = traffic · color = conv. rate</div>
+      </div>
+      <div style="flex:1;padding:8px;display:flex;flex-direction:column;gap:2px">
+
+        <!-- Treemap — green shades = high conversion -->
+        <div style="display:flex;gap:2px;height:120px">
+          <div style="flex:2.2;background:#0a2e1a;border-radius:4px;padding:8px 10px;display:flex;flex-direction:column;justify-content:space-between;position:relative;overflow:hidden">
+            <div style="position:absolute;top:0;left:0;right:0;height:3px;background:var(--green)"></div>
+            <span style="font-size:11px;font-family:var(--mono);color:rgba(255,255,255,.6)">/pricing</span>
+            <div>
+              <div style="font-size:16px;font-weight:700;color:var(--green)">7.4%</div>
+              <div style="font-size:10px;color:rgba(255,255,255,.4)">4,200 visits</div>
+            </div>
+          </div>
+          <div style="flex:1.4;background:#082214;border-radius:4px;padding:8px 10px;display:flex;flex-direction:column;justify-content:space-between;overflow:hidden">
+            <div style="position:absolute;top:0;left:0;right:0;height:3px;background:#2ea043"></div>
+            <span style="font-size:11px;font-family:var(--mono);color:rgba(255,255,255,.5)">/signup</span>
+            <div>
+              <div style="font-size:14px;font-weight:700;color:#2ea043">5.1%</div>
+              <div style="font-size:10px;color:rgba(255,255,255,.3)">980 visits</div>
+            </div>
+          </div>
+        </div>
+
+        <div style="display:flex;gap:2px;height:90px">
+          <div style="flex:1.6;background:#101a28;border-radius:4px;padding:8px 10px;display:flex;flex-direction:column;justify-content:space-between;overflow:hidden">
+            <span style="font-size:11px;font-family:var(--mono);color:rgba(255,255,255,.5)">/docs</span>
+            <div>
+              <div style="font-size:14px;font-weight:700;color:#58a6ff">3.2%</div>
+              <div style="font-size:10px;color:rgba(255,255,255,.3)">3,100</div>
+            </div>
+          </div>
+          <div style="flex:1.2;background:#0e1620;border-radius:4px;padding:8px 10px;display:flex;flex-direction:column;justify-content:space-between;overflow:hidden">
+            <span style="font-size:11px;font-family:var(--mono);color:rgba(255,255,255,.5)">/blog</span>
+            <div>
+              <div style="font-size:14px;font-weight:700;color:#58a6ff">2.8%</div>
+              <div style="font-size:10px;color:rgba(255,255,255,.3)">5,210</div>
+            </div>
+          </div>
+          <div style="flex:1;background:#0d1520;border-radius:4px;padding:8px 10px;display:flex;flex-direction:column;justify-content:space-between;overflow:hidden">
+            <span style="font-size:11px;font-family:var(--mono);color:rgba(255,255,255,.4)">/about</span>
+            <div>
+              <div style="font-size:13px;font-weight:700;color:#484f58">0.9%</div>
+              <div style="font-size:10px;color:rgba(255,255,255,.25)">1,830</div>
+            </div>
+          </div>
+        </div>
+
+        <div style="display:flex;gap:2px;height:64px">
+          <div style="flex:3;background:#0d1320;border-radius:4px;padding:7px 10px;display:flex;align-items:center;justify-content:space-between;overflow:hidden">
+            <span style="font-size:11px;font-family:var(--mono);color:rgba(255,255,255,.4)">/</span>
+            <div style="text-align:right">
+              <div style="font-size:13px;font-weight:700;color:#484f58">0.4%</div>
+              <div style="font-size:10px;color:rgba(255,255,255,.2)">18,420</div>
+            </div>
+          </div>
+          <div style="flex:1;background:#0c1218;border-radius:4px;padding:7px 8px;display:flex;flex-direction:column;justify-content:space-between;overflow:hidden">
+            <span style="font-size:10px;font-family:var(--mono);color:rgba(255,255,255,.3)">/other</span>
+            <div style="font-size:12px;font-weight:600;color:#30363d">0.2%</div>
+          </div>
+        </div>
+
+        <!-- Legend -->
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:6px 2px 2px">
+          <span style="font-size:10px;color:var(--text-3)">Low conv.</span>
+          <div style="flex:1;height:3px;margin:0 8px;border-radius:999px;background:linear-gradient(to right, #30363d, #58a6ff, #2ea043, #3fb950)"></div>
+          <span style="font-size:10px;color:var(--green)">High conv.</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+</div>
+
 <div class="footnote">apps-blueprints · umbra-dashboard · for Figma design reference</div>
 
 <script>
@@ -1021,6 +1226,7 @@ function show(n, btn) {
   document.getElementById('s' + n).classList.add('active')
   btn.classList.add('active')
   if (n === 3) { setTimeout(startS3, 80) }
+  else if (n === 4) { setTimeout(initScreen4, 80) }
   else setTimeout(initCharts, 50)
 }
 
@@ -1263,6 +1469,49 @@ function startS3() {
 }
 function stopS3() {
   if (s3interval) { clearInterval(s3interval); s3interval = null }
+}
+
+// Screen 4: 90-day growth chart
+let c4inited = false
+function initScreen4() {
+  if (c4inited) return
+  c4inited = true
+  const el = document.getElementById('c4growth')
+  if (!el) return
+  const ctx = el.getContext('2d')
+  const days = 90
+  const visitors = Array.from({length:days}, (_,i) => Math.round(200 + i*3.2 + Math.sin(i*.3)*40 + Math.sin(i*.7)*20 + Math.random()*30))
+  const signups  = visitors.map(v => Math.round(v * (0.008 + Math.random()*.006)))
+  const gradV = ctx.createLinearGradient(0,0,0,260)
+  gradV.addColorStop(0,'rgba(47,129,247,.25)')
+  gradV.addColorStop(1,'rgba(47,129,247,0)')
+  const gradS = ctx.createLinearGradient(0,0,0,260)
+  gradS.addColorStop(0,'rgba(63,185,80,.35)')
+  gradS.addColorStop(1,'rgba(63,185,80,0)')
+  new Chart(ctx, {
+    type:'line',
+    data:{
+      labels: Array.from({length:days},(_,i)=>i),
+      datasets:[
+        { label:'Visitors', data:visitors, borderColor:'#2F81F7', borderWidth:1.5, fill:{target:'origin',above:gradV}, tension:0.4, pointRadius:0, yAxisID:'y' },
+        { label:'Signups',  data:signups,  borderColor:'#3fb950', borderWidth:1.5, fill:{target:'origin',above:gradS}, tension:0.4, pointRadius:0, yAxisID:'y2' }
+      ]
+    },
+    options:{
+      responsive:true, maintainAspectRatio:false,
+      animation:{ duration:800, easing:'easeOutCubic' },
+      interaction:{ mode:'index', intersect:false },
+      plugins:{
+        legend:{ display:false },
+        tooltip:{ backgroundColor:'#161b22', borderColor:'#30363d', borderWidth:1, titleColor:'#8b949e', bodyColor:'#e6edf3', padding:8 }
+      },
+      scales:{
+        x:{ display:false },
+        y:{ position:'left', grid:{color:'rgba(48,54,61,.4)',drawTicks:false}, border:{display:false,dash:[3,3]}, ticks:{color:'#484f58',font:{size:10},maxTicksLimit:5,padding:6} },
+        y2:{ position:'right', grid:{display:false}, border:{display:false}, ticks:{color:'#484f58',font:{size:10},maxTicksLimit:5,padding:6} }
+      }
+    }
+  })
 }
 
 makeBars('compBars1')
