@@ -470,6 +470,7 @@ body {
     <button class="tab-btn" onclick="show(2,this)">Screen 2 — Sources & Funnel</button>
     <button class="tab-btn" onclick="show(3,this)">Screen 3 — Live Right Now</button>
     <button class="tab-btn" onclick="show(4,this)">Screen 4 — Conversion & Growth</button>
+    <button class="tab-btn" onclick="show(5,this)">Screen 5 — Integrations</button>
   </div>
 </div>
 
@@ -1227,6 +1228,7 @@ function show(n, btn) {
   btn.classList.add('active')
   if (n === 3) { setTimeout(startS3, 80) }
   else if (n === 4) { setTimeout(initScreen4, 80) }
+  else if (n === 5) { /* static, no charts */ }
   else setTimeout(initCharts, 50)
 }
 
@@ -1517,6 +1519,459 @@ function initScreen4() {
 makeBars('compBars1')
 setTimeout(initCharts, 100)
 </script>
+
+<!-- ══════════════════════════════════════════
+     SCREEN 5 — Integrations
+══════════════════════════════════════════ -->
+<style>
+.intg-layout { display:flex; height:calc(100vh - 112px); overflow:hidden; }
+.intg-sidebar {
+  width:200px; flex-shrink:0;
+  border-right:1px solid var(--border);
+  padding:20px 0;
+  overflow-y:auto;
+}
+.intg-sidebar-section { padding:0 12px 4px; font-size:10px; font-weight:600; color:var(--muted); text-transform:uppercase; letter-spacing:.08em; margin-bottom:4px; margin-top:16px; }
+.intg-sidebar-section:first-child { margin-top:0; }
+.intg-cat {
+  display:flex; align-items:center; justify-content:space-between;
+  padding:7px 14px; font-size:12.5px; color:var(--text-muted);
+  cursor:pointer; border-radius:6px; margin:0 8px;
+  transition:background .12s, color .12s;
+}
+.intg-cat:hover { background:var(--bg-hover); color:var(--text); }
+.intg-cat.active { background:rgba(47,129,247,.12); color:#2F81F7; font-weight:500; }
+.intg-cat-count {
+  font-size:10px; font-weight:600; color:var(--muted);
+  background:var(--bg-hover); border-radius:999px;
+  padding:1px 6px; min-width:18px; text-align:center;
+}
+.intg-cat.active .intg-cat-count { background:rgba(47,129,247,.2); color:#2F81F7; }
+
+.intg-main { flex:1; overflow-y:auto; padding:24px 28px; }
+.intg-topbar {
+  display:flex; align-items:center; justify-content:space-between;
+  margin-bottom:24px; gap:12px;
+}
+.intg-title { font-size:16px; font-weight:700; color:var(--text); flex-shrink:0; }
+.intg-search {
+  display:flex; align-items:center; gap:8px;
+  background:var(--bg-card); border:1px solid var(--border);
+  border-radius:8px; padding:7px 12px; width:260px;
+  font-size:12.5px; color:var(--text-muted);
+}
+.intg-search svg { flex-shrink:0; opacity:.5; }
+.intg-req-btn {
+  display:flex; align-items:center; gap:6px;
+  background:transparent; border:1px solid var(--border);
+  border-radius:7px; padding:7px 14px;
+  font-size:12px; font-weight:500; color:var(--text-muted);
+  cursor:pointer; white-space:nowrap;
+  transition:border-color .12s, color .12s;
+}
+.intg-req-btn:hover { border-color:#2F81F7; color:#2F81F7; }
+
+/* Connected strip */
+.intg-connected-label { font-size:11px; font-weight:600; color:var(--muted); text-transform:uppercase; letter-spacing:.08em; margin-bottom:12px; }
+.intg-connected-strip { display:flex; gap:12px; margin-bottom:32px; }
+.intg-conn-card {
+  flex:1; background:var(--bg-card); border:1px solid var(--border);
+  border-radius:10px; padding:16px 18px;
+  display:flex; align-items:flex-start; gap:14px;
+  position:relative; overflow:hidden;
+}
+.intg-conn-card::before {
+  content:''; position:absolute; top:0; left:0; right:0; height:2px;
+  background:var(--conn-color, #2F81F7);
+}
+.intg-conn-icon {
+  width:38px; height:38px; border-radius:9px; flex-shrink:0;
+  display:flex; align-items:center; justify-content:center;
+  background:var(--icon-bg, rgba(47,129,247,.12));
+  font-size:17px;
+}
+.intg-conn-info { flex:1; min-width:0; }
+.intg-conn-name { font-size:13px; font-weight:600; color:var(--text); margin-bottom:2px; }
+.intg-conn-stat { font-size:11.5px; color:var(--text-muted); margin-bottom:8px; }
+.intg-conn-meta { display:flex; align-items:center; justify-content:space-between; }
+.intg-conn-events { font-size:11px; font-weight:600; color:var(--text); }
+.intg-conn-sync { font-size:10.5px; color:var(--muted); }
+.intg-conn-badge {
+  position:absolute; top:14px; right:14px;
+  font-size:10px; font-weight:600;
+  padding:2px 8px; border-radius:999px;
+  background:rgba(63,185,80,.12); color:#3fb950;
+  border:1px solid rgba(63,185,80,.2);
+}
+
+/* Available grid */
+.intg-avail-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:14px; }
+.intg-avail-label { font-size:11px; font-weight:600; color:var(--muted); text-transform:uppercase; letter-spacing:.08em; }
+.intg-filter-tabs { display:flex; gap:4px; }
+.intg-filter-tab {
+  font-size:11.5px; padding:4px 10px; border-radius:6px;
+  border:1px solid transparent; color:var(--text-muted);
+  cursor:pointer; background:none; transition:all .12s;
+}
+.intg-filter-tab.active { background:var(--bg-hover); border-color:var(--border); color:var(--text); }
+.intg-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; }
+.intg-card {
+  background:var(--bg-card); border:1px solid var(--border);
+  border-radius:10px; padding:16px;
+  display:flex; flex-direction:column; gap:10px;
+  cursor:pointer; transition:border-color .15s, background .15s;
+  position:relative;
+}
+.intg-card:hover { border-color:rgba(47,129,247,.4); background:#1c2128; }
+.intg-card-top { display:flex; align-items:center; gap:10px; }
+.intg-card-icon {
+  width:34px; height:34px; border-radius:8px; flex-shrink:0;
+  display:flex; align-items:center; justify-content:center; font-size:15px;
+}
+.intg-card-name { font-size:13px; font-weight:600; color:var(--text); }
+.intg-card-cat { font-size:10.5px; color:var(--muted); margin-top:1px; }
+.intg-card-desc { font-size:11.5px; color:var(--text-muted); line-height:1.55; }
+.intg-card-footer { display:flex; align-items:center; justify-content:space-between; margin-top:2px; }
+.intg-status {
+  font-size:10px; font-weight:600; border-radius:999px; padding:2px 8px; border:1px solid;
+}
+.intg-status-available { background:rgba(47,129,247,.1); color:#2F81F7; border-color:rgba(47,129,247,.2); }
+.intg-status-soon { background:rgba(139,148,158,.08); color:#8b949e; border-color:rgba(139,148,158,.15); }
+.intg-status-popular { background:rgba(210,153,34,.1); color:#d4a017; border-color:rgba(210,153,34,.2); }
+.intg-connect-btn {
+  font-size:11px; font-weight:500; padding:4px 12px;
+  border-radius:6px; border:1px solid var(--border);
+  background:none; color:var(--text-muted);
+  cursor:pointer; transition:all .12s;
+}
+.intg-connect-btn:hover { border-color:#2F81F7; color:#2F81F7; background:rgba(47,129,247,.06); }
+.intg-connect-btn.disabled { opacity:.4; cursor:default; }
+.intg-connect-btn.disabled:hover { border-color:var(--border); color:var(--text-muted); background:none; }
+
+/* Webhooks callout */
+.intg-webhook-callout {
+  margin-top:20px;
+  background:var(--bg-card); border:1px solid var(--border);
+  border-radius:10px; padding:18px 20px;
+  display:flex; align-items:center; justify-content:space-between; gap:16px;
+}
+.intg-webhook-left { display:flex; align-items:center; gap:14px; }
+.intg-webhook-icon {
+  width:38px; height:38px; border-radius:9px;
+  background:rgba(163,113,247,.12); border:1px solid rgba(163,113,247,.2);
+  display:flex; align-items:center; justify-content:center; font-size:17px; flex-shrink:0;
+}
+.intg-webhook-text {}
+.intg-webhook-name { font-size:13px; font-weight:600; color:var(--text); margin-bottom:3px; }
+.intg-webhook-desc { font-size:11.5px; color:var(--text-muted); }
+.intg-webhook-code {
+  background:#0d1117; border:1px solid var(--border); border-radius:7px;
+  padding:10px 14px; font-family:ui-monospace,'JetBrains Mono',monospace;
+  font-size:11.5px; color:#79c0ff; letter-spacing:.02em;
+  display:flex; align-items:center; gap:10px;
+}
+.intg-webhook-actions { display:flex; align-items:center; gap:8px; flex-shrink:0; }
+.intg-webhook-btn {
+  font-size:11.5px; font-weight:500; padding:6px 14px;
+  border-radius:7px; cursor:pointer; transition:all .12s;
+}
+.intg-webhook-btn-outline { border:1px solid var(--border); background:none; color:var(--text-muted); }
+.intg-webhook-btn-outline:hover { border-color:#2F81F7; color:#2F81F7; }
+.intg-webhook-btn-fill { border:1px solid rgba(47,129,247,.4); background:rgba(47,129,247,.1); color:#2F81F7; }
+.intg-webhook-btn-fill:hover { background:rgba(47,129,247,.18); }
+</style>
+
+<div class="screen" id="s5">
+  <!-- topbar -->
+  <div style="background:var(--bg-card);border-bottom:1px solid var(--border);padding:0 20px;display:flex;align-items:center;justify-content:space-between;height:48px;gap:16px">
+    <div style="display:flex;align-items:center;gap:8px">
+      <div style="width:22px;height:22px;background:#2F81F7;border-radius:5px;display:flex;align-items:center;justify-content:center">
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M1 9l2.5-3.5L6 8l2.5-4L11 7" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+      Umbrave
+    </div>
+    <div style="display:flex;align-items:center;gap:4px;background:var(--bg-hover);border:1px solid var(--border);border-radius:6px;padding:3px">
+      <div style="padding:4px 10px;font-size:11.5px;color:var(--text-muted);cursor:pointer">Overview</div>
+      <div style="padding:4px 10px;font-size:11.5px;color:var(--text-muted);cursor:pointer">Sources</div>
+      <div style="padding:4px 10px;font-size:11.5px;color:var(--text-muted);cursor:pointer">Funnels</div>
+      <div style="padding:4px 10px;font-size:11.5px;background:#2F81F7;color:#fff;border-radius:5px;font-weight:600;cursor:pointer">Integrations</div>
+    </div>
+    <div style="display:flex;align-items:center;gap:10px">
+      <div style="font-size:11.5px;color:var(--text-muted);padding:4px 10px;border:1px solid var(--border);border-radius:6px">app.umbrave.io</div>
+      <div style="width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,#2F81F7,#8957e5);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:#fff">AV</div>
+    </div>
+  </div>
+
+  <div class="intg-layout">
+    <!-- Sidebar -->
+    <div class="intg-sidebar">
+      <div class="intg-sidebar-section">Overview</div>
+      <div class="intg-cat active">
+        <span>All integrations</span>
+        <span class="intg-cat-count">24</span>
+      </div>
+      <div class="intg-cat">
+        <span>Connected</span>
+        <span class="intg-cat-count" style="background:rgba(63,185,80,.15);color:#3fb950">3</span>
+      </div>
+
+      <div class="intg-sidebar-section">Categories</div>
+      <div class="intg-cat">
+        <span>Analytics</span>
+        <span class="intg-cat-count">5</span>
+      </div>
+      <div class="intg-cat">
+        <span>Platforms & CMS</span>
+        <span class="intg-cat-count">7</span>
+      </div>
+      <div class="intg-cat">
+        <span>Notifications</span>
+        <span class="intg-cat-count">4</span>
+      </div>
+      <div class="intg-cat">
+        <span>Data Export</span>
+        <span class="intg-cat-count">4</span>
+      </div>
+      <div class="intg-cat">
+        <span>Auth & Identity</span>
+        <span class="intg-cat-count">3</span>
+      </div>
+      <div class="intg-cat">
+        <span>Developer</span>
+        <span class="intg-cat-count">1</span>
+      </div>
+    </div>
+
+    <!-- Main -->
+    <div class="intg-main">
+      <div class="intg-topbar">
+        <div class="intg-title">Integrations</div>
+        <div style="display:flex;align-items:center;gap:10px;flex:1;justify-content:center">
+          <div class="intg-search">
+            <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="5.5" cy="5.5" r="4"/><path d="M10 10l-2-2"/></svg>
+            Search integrations…
+          </div>
+        </div>
+        <button class="intg-req-btn">
+          <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 1v10M1 6h10"/></svg>
+          Request integration
+        </button>
+      </div>
+
+      <!-- Connected -->
+      <div class="intg-connected-label">Connected — 3 active</div>
+      <div class="intg-connected-strip">
+        <!-- Segment -->
+        <div class="intg-conn-card" style="--conn-color:#52bd95;--icon-bg:rgba(82,189,149,.12)">
+          <div class="intg-conn-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="#52bd95" stroke-width="1.5"/><path d="M8 12h8M12 8l4 4-4 4" stroke="#52bd95" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <div class="intg-conn-info">
+            <div class="intg-conn-name">Segment</div>
+            <div class="intg-conn-stat">Receiving events via server-side</div>
+            <div class="intg-conn-meta">
+              <span class="intg-conn-events">184k events / day</span>
+              <span class="intg-conn-sync">synced 2m ago</span>
+            </div>
+          </div>
+          <div class="intg-conn-badge">Live</div>
+        </div>
+        <!-- Slack -->
+        <div class="intg-conn-card" style="--conn-color:#611f69;--icon-bg:rgba(97,31,105,.15)">
+          <div class="intg-conn-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="#e01e5a"><path d="M5.04 15.48a2.52 2.52 0 01-2.52-2.52 2.52 2.52 0 012.52-2.52h2.52v2.52A2.52 2.52 0 015.04 15.48zM6.3 6.3A2.52 2.52 0 018.82 3.78a2.52 2.52 0 012.52 2.52v6.3A2.52 2.52 0 018.82 15.12 2.52 2.52 0 016.3 12.6V6.3z" fill="#e01e5a"/><path d="M8.82 20.22a2.52 2.52 0 002.52-2.52 2.52 2.52 0 00-2.52-2.52H6.3v2.52a2.52 2.52 0 002.52 2.52zM17.7 8.52A2.52 2.52 0 0115.18 6a2.52 2.52 0 00-2.52 2.52v6.3a2.52 2.52 0 002.52 2.52 2.52 2.52 0 002.52-2.52V8.52z" fill="#36c5f0"/><path d="M18.96 15.48a2.52 2.52 0 01-2.52 2.52 2.52 2.52 0 01-2.52-2.52v-2.52h2.52a2.52 2.52 0 012.52 2.52z" fill="#2eb67d"/><path d="M12.66 5.04a2.52 2.52 0 012.52-2.52 2.52 2.52 0 012.52 2.52v2.52H15.18A2.52 2.52 0 0112.66 5.04z" fill="#ecb22e"/></svg>
+          </div>
+          <div class="intg-conn-info">
+            <div class="intg-conn-name">Slack</div>
+            <div class="intg-conn-stat">Alerts → #analytics-alerts</div>
+            <div class="intg-conn-meta">
+              <span class="intg-conn-events">12 alerts / week</span>
+              <span class="intg-conn-sync">synced 18m ago</span>
+            </div>
+          </div>
+          <div class="intg-conn-badge">Live</div>
+        </div>
+        <!-- BigQuery -->
+        <div class="intg-conn-card" style="--conn-color:#4285F4;--icon-bg:rgba(66,133,244,.12)">
+          <div class="intg-conn-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M12 2L3 7v10l9 5 9-5V7z" stroke="#4285F4" stroke-width="1.5" stroke-linejoin="round"/><path d="M12 12v8M3 7l9 5 9-5" stroke="#4285F4" stroke-width="1.5" stroke-linejoin="round"/></svg>
+          </div>
+          <div class="intg-conn-info">
+            <div class="intg-conn-name">BigQuery</div>
+            <div class="intg-conn-stat">Export to umbrave_analytics dataset</div>
+            <div class="intg-conn-meta">
+              <span class="intg-conn-events">2.1GB exported</span>
+              <span class="intg-conn-sync">daily at 03:00 UTC</span>
+            </div>
+          </div>
+          <div class="intg-conn-badge">Live</div>
+        </div>
+      </div>
+
+      <!-- Available -->
+      <div class="intg-avail-header">
+        <div class="intg-avail-label">Available — 21 integrations</div>
+        <div class="intg-filter-tabs">
+          <button class="intg-filter-tab active">All</button>
+          <button class="intg-filter-tab">Analytics</button>
+          <button class="intg-filter-tab">Platforms</button>
+          <button class="intg-filter-tab">Export</button>
+        </div>
+      </div>
+      <div class="intg-grid">
+        <!-- Row 1 -->
+        <div class="intg-card">
+          <div class="intg-card-top">
+            <div class="intg-card-icon" style="background:rgba(255,87,34,.12)">🔶</div>
+            <div>
+              <div class="intg-card-name">Google Analytics</div>
+              <div class="intg-card-cat">Analytics · Import</div>
+            </div>
+          </div>
+          <div class="intg-card-desc">Import historical GA4 data and compare privacy-first metrics side-by-side.</div>
+          <div class="intg-card-footer">
+            <span class="intg-status intg-status-popular">Popular</span>
+            <button class="intg-connect-btn">Connect</button>
+          </div>
+        </div>
+        <div class="intg-card">
+          <div class="intg-card-top">
+            <div class="intg-card-icon" style="background:rgba(255,64,129,.12)">🔴</div>
+            <div>
+              <div class="intg-card-name">Mixpanel</div>
+              <div class="intg-card-cat">Analytics · Sync</div>
+            </div>
+          </div>
+          <div class="intg-card-desc">Bi-directional event sync. Mirror Umbrave events into Mixpanel pipelines.</div>
+          <div class="intg-card-footer">
+            <span class="intg-status intg-status-available">Available</span>
+            <button class="intg-connect-btn">Connect</button>
+          </div>
+        </div>
+        <div class="intg-card">
+          <div class="intg-card-top">
+            <div class="intg-card-icon" style="background:rgba(63,185,80,.1)">📦</div>
+            <div>
+              <div class="intg-card-name">Shopify</div>
+              <div class="intg-card-cat">Platform · E-commerce</div>
+            </div>
+          </div>
+          <div class="intg-card-desc">Track purchases, cart events, and product views without Shopify Pixels.</div>
+          <div class="intg-card-footer">
+            <span class="intg-status intg-status-popular">Popular</span>
+            <button class="intg-connect-btn">Connect</button>
+          </div>
+        </div>
+        <!-- Row 2 -->
+        <div class="intg-card">
+          <div class="intg-card-top">
+            <div class="intg-card-icon" style="background:rgba(47,129,247,.12)">🌐</div>
+            <div>
+              <div class="intg-card-name">Webflow</div>
+              <div class="intg-card-cat">Platform · CMS</div>
+            </div>
+          </div>
+          <div class="intg-card-desc">One-click snippet injection. Works with Webflow CMS collections and memberships.</div>
+          <div class="intg-card-footer">
+            <span class="intg-status intg-status-available">Available</span>
+            <button class="intg-connect-btn">Connect</button>
+          </div>
+        </div>
+        <div class="intg-card">
+          <div class="intg-card-top">
+            <div class="intg-card-icon" style="background:rgba(163,113,247,.12)">🔷</div>
+            <div>
+              <div class="intg-card-name">Framer</div>
+              <div class="intg-card-cat">Platform · No-code</div>
+            </div>
+          </div>
+          <div class="intg-card-desc">Install via custom code panel. Auto-detects CMS pages and published domains.</div>
+          <div class="intg-card-footer">
+            <span class="intg-status intg-status-available">Available</span>
+            <button class="intg-connect-btn">Connect</button>
+          </div>
+        </div>
+        <div class="intg-card">
+          <div class="intg-card-top">
+            <div class="intg-card-icon" style="background:rgba(66,133,244,.12)">📊</div>
+            <div>
+              <div class="intg-card-name">Looker Studio</div>
+              <div class="intg-card-cat">Export · BI</div>
+            </div>
+          </div>
+          <div class="intg-card-desc">Connect Umbrave as a data source for custom Looker Studio dashboards.</div>
+          <div class="intg-card-footer">
+            <span class="intg-status intg-status-available">Available</span>
+            <button class="intg-connect-btn">Connect</button>
+          </div>
+        </div>
+        <!-- Row 3 -->
+        <div class="intg-card">
+          <div class="intg-card-top">
+            <div class="intg-card-icon" style="background:rgba(210,153,34,.12)">⚡</div>
+            <div>
+              <div class="intg-card-name">Zapier</div>
+              <div class="intg-card-cat">Automation</div>
+            </div>
+          </div>
+          <div class="intg-card-desc">Trigger Zaps on goal completions, traffic spikes, and custom events.</div>
+          <div class="intg-card-footer">
+            <span class="intg-status intg-status-available">Available</span>
+            <button class="intg-connect-btn">Connect</button>
+          </div>
+        </div>
+        <div class="intg-card">
+          <div class="intg-card-top">
+            <div class="intg-card-icon" style="background:rgba(255,171,64,.1)">🔔</div>
+            <div>
+              <div class="intg-card-name">Discord</div>
+              <div class="intg-card-cat">Notifications</div>
+            </div>
+          </div>
+          <div class="intg-card-desc">Send real-time alerts to Discord channels for traffic anomalies and milestones.</div>
+          <div class="intg-card-footer">
+            <span class="intg-status intg-status-available">Available</span>
+            <button class="intg-connect-btn">Connect</button>
+          </div>
+        </div>
+        <div class="intg-card" style="border-style:dashed;opacity:.65">
+          <div class="intg-card-top">
+            <div class="intg-card-icon" style="background:rgba(139,148,158,.08)">❄️</div>
+            <div>
+              <div class="intg-card-name">Snowflake</div>
+              <div class="intg-card-cat">Export · Data Warehouse</div>
+            </div>
+          </div>
+          <div class="intg-card-desc">Stream raw event data directly into your Snowflake warehouse in real-time.</div>
+          <div class="intg-card-footer">
+            <span class="intg-status intg-status-soon">Coming soon</span>
+            <button class="intg-connect-btn disabled" disabled>Connect</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Webhook callout -->
+      <div class="intg-webhook-callout">
+        <div class="intg-webhook-left">
+          <div class="intg-webhook-icon">🔗</div>
+          <div class="intg-webhook-text">
+            <div class="intg-webhook-name">Custom Webhooks</div>
+            <div class="intg-webhook-desc">Send raw event payloads to any endpoint. Supports HMAC signing and retry logic.</div>
+          </div>
+        </div>
+        <div class="intg-webhook-code">
+          POST https://hooks.umbrave.io/v1/out/<span style="color:#ffa657">wh_</span><span style="opacity:.5">••••••••</span>
+          <svg width="13" height="13" fill="none" stroke="#8b949e" stroke-width="1.5" style="margin-left:4px;cursor:pointer"><rect x="2" y="4" width="8" height="8" rx="1.5"/><path d="M5 4V3a1 1 0 011-1h4a1 1 0 011 1v6a1 1 0 01-1 1h-1"/></svg>
+        </div>
+        <div class="intg-webhook-actions">
+          <button class="intg-webhook-btn intg-webhook-btn-outline">Docs</button>
+          <button class="intg-webhook-btn intg-webhook-btn-fill">Configure</button>
+        </div>
+      </div>
+
+    </div><!-- /intg-main -->
+  </div><!-- /intg-layout -->
+</div><!-- /s5 -->
 
 <style>
 @keyframes pulse {
