@@ -472,6 +472,7 @@ body {
     <button class="tab-btn" onclick="show(4,this)">Screen 4 — Conversion & Growth</button>
     <button class="tab-btn" onclick="show(5,this)">Screen 5 — Integrations</button>
     <button class="tab-btn" onclick="show(6,this)">Screen 6 — UI Components</button>
+    <button class="tab-btn" onclick="show(7,this)">Screen 7 — Site Overview</button>
   </div>
 </div>
 
@@ -1231,6 +1232,7 @@ function show(n, btn) {
   else if (n === 4) { setTimeout(initScreen4, 80) }
   else if (n === 5) { /* static */ }
   else if (n === 6) { /* static */ }
+  else if (n === 7) { setTimeout(initS7, 80) }
   else setTimeout(initCharts, 50)
 }
 
@@ -2590,3 +2592,233 @@ setTimeout(initCharts, 100)
 
   </div><!-- /comp-page -->
 </div><!-- /s6 -->
+
+<!-- ══════════════════════════════════════════
+     SCREEN 7 — Site Overview
+══════════════════════════════════════════ -->
+<style>
+@keyframes spin { from { transform:rotate(0deg) } to { transform:rotate(360deg) } }
+</style>
+
+<div class="screen" id="s7">
+  <!-- topbar -->
+  <div style="background:var(--bg-card);border-bottom:1px solid var(--border);padding:0 20px;display:flex;align-items:center;justify-content:space-between;height:48px;gap:16px;flex-shrink:0">
+    <div style="display:flex;align-items:center;gap:8px">
+      <div style="width:22px;height:22px;background:#2F81F7;border-radius:5px;display:flex;align-items:center;justify-content:center">
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M1 9l2.5-3.5L6 8l2.5-4L11 7" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+      <span style="font-size:13px;font-weight:700;color:var(--text)">Umbrave</span>
+    </div>
+    <div style="display:flex;align-items:center;background:var(--bg);border:1px solid var(--border);border-radius:8px;overflow:hidden;width:260px">
+      <div style="padding:6px 10px;font-size:10.5px;color:var(--muted);border-right:1px solid var(--border);background:var(--bg-hover);white-space:nowrap">https://</div>
+      <div style="padding:6px 12px;font-size:12px;color:var(--text);flex:1">mysite.com</div>
+      <div style="width:6px;height:6px;border-radius:50%;background:#3fb950;margin-right:10px;flex-shrink:0"></div>
+    </div>
+    <button onclick="refreshS7(this)" style="background:#2F81F7;color:#fff;border:none;border-radius:8px;padding:7px 18px;font-size:12.5px;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:6px">
+      <svg id="s7-ri" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" style="transform-origin:center"><path d="M10.5 3.5A5 5 0 002 7M1.5 8.5A5 5 0 0010 5"/><path d="M10.5 1v2.5H8M2 10.5V8H4.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      Refresh
+    </button>
+  </div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;height:calc(100vh - 160px);overflow:hidden">
+
+    <!-- LEFT -->
+    <div style="border-right:1px solid var(--border);overflow-y:auto;display:flex;flex-direction:column">
+
+      <!-- Engagement + chart -->
+      <div style="padding:18px 20px;border-bottom:1px solid var(--border)">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+          <span style="font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.07em">Total Engagement</span>
+          <span style="font-size:11px;color:var(--muted)">Last 30 days</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:14px;margin-bottom:16px">
+          <svg width="46" height="46" viewBox="0 0 46 46" style="flex-shrink:0">
+            <circle cx="23" cy="23" r="18" fill="none" stroke="var(--bg-hover)" stroke-width="5.5"/>
+            <circle cx="23" cy="23" r="18" fill="none" stroke="#2F81F7" stroke-width="5.5" stroke-dasharray="75.8 37.3" stroke-linecap="round" style="transform-origin:center;transform:rotate(-90deg)"/>
+            <text x="23" y="27" text-anchor="middle" font-size="9.5" font-weight="700" fill="#e6edf3">67%</text>
+          </svg>
+          <div>
+            <div style="font-size:24px;font-weight:700;color:var(--text);line-height:1">8h 0m</div>
+            <div style="font-size:11.5px;color:var(--text-muted);margin-top:3px">of monthly target &nbsp;<span style="color:#3fb950;font-weight:600">↑ 4.2%</span></div>
+          </div>
+          <div style="margin-left:auto;text-align:right;flex-shrink:0">
+            <div style="font-size:10px;color:var(--muted)">Today so far</div>
+            <div style="font-size:14px;font-weight:600;color:var(--text)">0h 22m</div>
+          </div>
+        </div>
+        <div style="height:130px;position:relative"><canvas id="s7chart"></canvas></div>
+      </div>
+
+      <!-- 5 KPI strip -->
+      <div style="display:flex;border-bottom:1px solid var(--border);flex-shrink:0">
+        <div style="flex:1;padding:11px 13px;border-right:1px solid var(--border)">
+          <div style="font-size:16px;margin-bottom:3px">📄</div>
+          <div style="font-size:9.5px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.05em;margin-bottom:3px">Page views</div>
+          <div style="font-size:15px;font-weight:700;color:var(--text);line-height:1">84,241</div>
+          <div style="font-size:9.5px;font-weight:600;color:#3fb950;margin-top:3px">↑ 8.2%</div>
+        </div>
+        <div style="flex:1;padding:11px 13px;border-right:1px solid var(--border)">
+          <div style="font-size:16px;margin-bottom:3px">🔄</div>
+          <div style="font-size:9.5px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.05em;margin-bottom:3px">Sessions</div>
+          <div style="font-size:15px;font-weight:700;color:var(--text);line-height:1">31,482</div>
+          <div style="font-size:9.5px;font-weight:600;color:#3fb950;margin-top:3px">↑ 5.4%</div>
+        </div>
+        <div style="flex:1;padding:11px 13px;border-right:1px solid var(--border)">
+          <div style="font-size:16px;margin-bottom:3px">👤</div>
+          <div style="font-size:9.5px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.05em;margin-bottom:3px">Visitors</div>
+          <div style="font-size:15px;font-weight:700;color:var(--text);line-height:1">24,553</div>
+          <div style="font-size:9.5px;font-weight:600;color:#3fb950;margin-top:3px">↑ 12.4%</div>
+        </div>
+        <div style="flex:1;padding:11px 13px;border-right:1px solid var(--border)">
+          <div style="font-size:16px;margin-bottom:3px">⏱️</div>
+          <div style="font-size:9.5px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.05em;margin-bottom:3px">Avg. time</div>
+          <div style="font-size:15px;font-weight:700;color:var(--text);line-height:1">2m 41s</div>
+          <div style="font-size:9.5px;font-weight:600;color:#8b949e;margin-top:3px">→ 0.2%</div>
+        </div>
+        <div style="flex:1;padding:11px 13px">
+          <div style="font-size:16px;margin-bottom:3px">📤</div>
+          <div style="font-size:9.5px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.05em;margin-bottom:3px">Bounce</div>
+          <div style="font-size:15px;font-weight:700;color:var(--text);line-height:1">38.2%</div>
+          <div style="font-size:9.5px;font-weight:600;color:#3fb950;margin-top:3px">↓ 3.1%</div>
+        </div>
+      </div>
+
+      <!-- Bottom: Countries + Privacy -->
+      <div style="display:flex;flex:1;min-height:0">
+        <div style="flex:1;padding:16px 18px;border-right:1px solid var(--border);overflow-y:auto">
+          <div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:14px">Top Countries</div>
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:9px"><span style="font-size:14px">🇺🇦</span><span style="font-size:11.5px;color:var(--text-muted);width:58px;flex-shrink:0">Ukraine</span><div style="flex:1;height:4px;background:var(--bg-hover);border-radius:2px"><div style="width:47%;height:4px;border-radius:2px;background:#2F81F7"></div></div><span style="font-size:11px;font-weight:600;color:var(--text);width:28px;text-align:right;flex-shrink:0">47%</span></div>
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:9px"><span style="font-size:14px">🇨🇦</span><span style="font-size:11.5px;color:var(--text-muted);width:58px;flex-shrink:0">Canada</span><div style="flex:1;height:4px;background:var(--bg-hover);border-radius:2px"><div style="width:33%;height:4px;border-radius:2px;background:#8957e5"></div></div><span style="font-size:11px;font-weight:600;color:var(--text);width:28px;text-align:right;flex-shrink:0">33%</span></div>
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:9px"><span style="font-size:14px">🇩🇪</span><span style="font-size:11.5px;color:var(--text-muted);width:58px;flex-shrink:0">Germany</span><div style="flex:1;height:4px;background:var(--bg-hover);border-radius:2px"><div style="width:24%;height:4px;border-radius:2px;background:#3fb950"></div></div><span style="font-size:11px;font-weight:600;color:var(--text);width:28px;text-align:right;flex-shrink:0">24%</span></div>
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:9px"><span style="font-size:14px">🌍</span><span style="font-size:11.5px;color:var(--text-muted);width:58px;flex-shrink:0">Other</span><div style="flex:1;height:4px;background:var(--bg-hover);border-radius:2px"><div style="width:12%;height:4px;border-radius:2px;background:#484f58"></div></div><span style="font-size:11px;font-weight:600;color:var(--text);width:28px;text-align:right;flex-shrink:0">12%</span></div>
+          <div style="font-size:10.5px;color:var(--muted);margin-top:10px;line-height:1.5">No IPs stored · anonymous geo signals</div>
+        </div>
+        <div style="flex:1;padding:16px 18px;overflow-y:auto">
+          <div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:8px">Privacy Compliance</div>
+          <div style="font-size:34px;font-weight:700;color:var(--text);line-height:1;margin-bottom:3px">99.2</div>
+          <div style="font-size:10.5px;color:var(--text-muted);margin-bottom:12px">GDPR · CCPA · PECR</div>
+          <div style="display:flex;flex-direction:column;gap:6px;margin-bottom:14px">
+            <div style="display:flex;align-items:center;justify-content:space-between"><span style="font-size:10.5px;color:var(--text-muted)">GDPR</span><span style="font-size:10px;font-weight:600;color:#3fb950;background:rgba(63,185,80,.1);border:1px solid rgba(63,185,80,.2);border-radius:999px;padding:1px 7px">Pass</span></div>
+            <div style="display:flex;align-items:center;justify-content:space-between"><span style="font-size:10.5px;color:var(--text-muted)">CCPA</span><span style="font-size:10px;font-weight:600;color:#3fb950;background:rgba(63,185,80,.1);border:1px solid rgba(63,185,80,.2);border-radius:999px;padding:1px 7px">Pass</span></div>
+            <div style="display:flex;align-items:center;justify-content:space-between"><span style="font-size:10.5px;color:var(--text-muted)">PECR</span><span style="font-size:10px;font-weight:600;color:#d4a017;background:rgba(210,153,34,.1);border:1px solid rgba(210,153,34,.2);border-radius:999px;padding:1px 7px">Review</span></div>
+          </div>
+          <div id="s7barcode" style="display:flex;align-items:flex-end;gap:1.5px;height:40px"></div>
+          <div style="font-size:10px;color:var(--muted);margin-top:5px">privacy signal strength · 30d</div>
+        </div>
+      </div>
+    </div>
+    <!-- /LEFT -->
+
+    <!-- RIGHT: Top Pages -->
+    <div style="overflow-y:auto;display:flex;flex-direction:column">
+      <div style="padding:14px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-shrink:0">
+        <span style="font-size:13px;font-weight:700;color:var(--text)">Top Pages</span>
+        <span style="font-size:11px;color:var(--muted)">14 pages · sorted by visitors · 7 days</span>
+      </div>
+      <div style="padding:12px;flex:1">
+
+        <!-- Row 1: 3 large, 120px -->
+        <div style="display:flex;gap:6px;margin-bottom:6px">
+          <div style="flex:1;height:120px;background:var(--bg-card);border:1px solid var(--border);border-top:2px solid #2F81F7;border-radius:8px;padding:10px 12px;display:flex;flex-direction:column;cursor:pointer;transition:border-color .15s" onmouseover="this.style.borderColor='rgba(47,129,247,.5)'" onmouseout="this.style.borderColor='var(--border)'">
+            <div style="font-size:10.5px;font-family:ui-monospace,monospace;color:var(--text-muted)">/home</div>
+            <svg width="100%" height="36" viewBox="0 0 100 36" preserveAspectRatio="none" style="margin:auto 0"><defs><linearGradient id="g1" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#2F81F7" stop-opacity=".25"/><stop offset="100%" stop-color="#2F81F7" stop-opacity="0"/></linearGradient></defs><polygon fill="url(#g1)" points="0,32 12,26 25,28 38,20 50,18 62,13 75,10 88,7 100,4 100,36 0,36"/><polyline fill="none" stroke="#2F81F7" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" points="0,32 12,26 25,28 38,20 50,18 62,13 75,10 88,7 100,4"/></svg>
+            <div style="font-size:20px;font-weight:700;color:var(--text);align-self:flex-end;line-height:1">12,345</div>
+          </div>
+          <div style="flex:1;height:120px;background:var(--bg-card);border:1px solid var(--border);border-top:2px solid #8957e5;border-radius:8px;padding:10px 12px;display:flex;flex-direction:column;cursor:pointer;transition:border-color .15s" onmouseover="this.style.borderColor='rgba(137,87,229,.5)'" onmouseout="this.style.borderColor='var(--border)'">
+            <div style="font-size:10.5px;font-family:ui-monospace,monospace;color:var(--text-muted)">/pricing</div>
+            <svg width="100%" height="36" viewBox="0 0 100 36" preserveAspectRatio="none" style="margin:auto 0"><defs><linearGradient id="g2" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#8957e5" stop-opacity=".25"/><stop offset="100%" stop-color="#8957e5" stop-opacity="0"/></linearGradient></defs><polygon fill="url(#g2)" points="0,30 14,24 28,27 42,18 55,22 68,14 80,11 90,8 100,6 100,36 0,36"/><polyline fill="none" stroke="#8957e5" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" points="0,30 14,24 28,27 42,18 55,22 68,14 80,11 90,8 100,6"/></svg>
+            <div style="font-size:20px;font-weight:700;color:var(--text);align-self:flex-end;line-height:1">8,456</div>
+          </div>
+          <div style="flex:1;height:120px;background:var(--bg-card);border:1px solid var(--border);border-top:2px solid #3fb950;border-radius:8px;padding:10px 12px;display:flex;flex-direction:column;cursor:pointer;transition:border-color .15s" onmouseover="this.style.borderColor='rgba(63,185,80,.5)'" onmouseout="this.style.borderColor='var(--border)'">
+            <div style="font-size:10.5px;font-family:ui-monospace,monospace;color:var(--text-muted)">/contact</div>
+            <svg width="100%" height="36" viewBox="0 0 100 36" preserveAspectRatio="none" style="margin:auto 0"><defs><linearGradient id="g3" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#3fb950" stop-opacity=".2"/><stop offset="100%" stop-color="#3fb950" stop-opacity="0"/></linearGradient></defs><polygon fill="url(#g3)" points="0,28 16,22 32,24 48,19 62,16 76,18 88,12 100,10 100,36 0,36"/><polyline fill="none" stroke="#3fb950" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" points="0,28 16,22 32,24 48,19 62,16 76,18 88,12 100,10"/></svg>
+            <div style="font-size:20px;font-weight:700;color:var(--text);align-self:flex-end;line-height:1">5,795</div>
+          </div>
+        </div>
+
+        <!-- Row 2: 4 medium, 82px -->
+        <div style="display:flex;gap:6px;margin-bottom:6px">
+          <div style="flex:1;height:82px;background:var(--bg-card);border:1px solid var(--border);border-top:2px solid #2F81F7;border-radius:8px;padding:9px 11px;display:flex;flex-direction:column;justify-content:space-between;cursor:pointer">
+            <div style="font-size:10px;font-family:ui-monospace,monospace;color:var(--text-muted)">/how-it-works</div>
+            <div style="display:flex;align-items:flex-end;justify-content:space-between"><svg width="60" height="22" viewBox="0 0 60 22"><polyline fill="none" stroke="#2F81F7" stroke-width="1.2" opacity=".5" points="0,18 12,14 24,15 36,10 48,8 60,5"/></svg><div style="font-size:16px;font-weight:700;color:var(--text)">4,679</div></div>
+          </div>
+          <div style="flex:1;height:82px;background:var(--bg-card);border:1px solid var(--border);border-top:2px solid #8957e5;border-radius:8px;padding:9px 11px;display:flex;flex-direction:column;justify-content:space-between;cursor:pointer">
+            <div style="font-size:10px;font-family:ui-monospace,monospace;color:var(--text-muted)">/integrations</div>
+            <div style="display:flex;align-items:flex-end;justify-content:space-between"><svg width="60" height="22" viewBox="0 0 60 22"><polyline fill="none" stroke="#8957e5" stroke-width="1.2" opacity=".5" points="0,16 12,12 24,14 36,9 48,7 60,5"/></svg><div style="font-size:16px;font-weight:700;color:var(--text)">3,213</div></div>
+          </div>
+          <div style="flex:1;height:82px;background:var(--bg-card);border:1px solid var(--border);border-top:2px solid #3fb950;border-radius:8px;padding:9px 11px;display:flex;flex-direction:column;justify-content:space-between;cursor:pointer">
+            <div style="font-size:10px;font-family:ui-monospace,monospace;color:var(--text-muted)">/about</div>
+            <div style="display:flex;align-items:flex-end;justify-content:space-between"><svg width="60" height="22" viewBox="0 0 60 22"><polyline fill="none" stroke="#3fb950" stroke-width="1.2" opacity=".5" points="0,18 12,15 24,17 36,12 48,10 60,8"/></svg><div style="font-size:16px;font-weight:700;color:var(--text)">2,566</div></div>
+          </div>
+          <div style="flex:1;height:82px;background:var(--bg-card);border:1px solid var(--border);border-top:2px solid #d4a017;border-radius:8px;padding:9px 11px;display:flex;flex-direction:column;justify-content:space-between;cursor:pointer">
+            <div style="font-size:10px;font-family:ui-monospace,monospace;color:var(--text-muted)">/blog-post</div>
+            <div style="display:flex;align-items:flex-end;justify-content:space-between"><svg width="60" height="22" viewBox="0 0 60 22"><polyline fill="none" stroke="#d4a017" stroke-width="1.2" opacity=".5" points="0,14 12,12 24,16 36,11 48,9 60,7"/></svg><div style="font-size:16px;font-weight:700;color:var(--text)">1,973</div></div>
+          </div>
+        </div>
+
+        <!-- Row 3: 5 small, 60px -->
+        <div style="display:flex;gap:6px;margin-bottom:6px">
+          <div style="flex:1;height:60px;background:var(--bg-card);border:1px solid var(--border);border-radius:8px;padding:8px 10px;display:flex;flex-direction:column;justify-content:space-between;cursor:pointer"><div style="font-size:9.5px;font-family:ui-monospace,monospace;color:var(--text-muted)">/contact</div><div style="font-size:14px;font-weight:700;color:var(--text)">899</div></div>
+          <div style="flex:1;height:60px;background:var(--bg-card);border:1px solid var(--border);border-radius:8px;padding:8px 10px;display:flex;flex-direction:column;justify-content:space-between;cursor:pointer"><div style="font-size:9.5px;font-family:ui-monospace,monospace;color:var(--text-muted)">/changelog</div><div style="font-size:14px;font-weight:700;color:var(--text)">533</div></div>
+          <div style="flex:1;height:60px;background:var(--bg-card);border:1px solid var(--border);border-radius:8px;padding:8px 10px;display:flex;flex-direction:column;justify-content:space-between;cursor:pointer"><div style="font-size:9.5px;font-family:ui-monospace,monospace;color:var(--text-muted)">/privacy</div><div style="font-size:14px;font-weight:700;color:var(--text)">451</div></div>
+          <div style="flex:1;height:60px;background:var(--bg-card);border:1px solid var(--border);border-radius:8px;padding:8px 10px;display:flex;flex-direction:column;justify-content:space-between;cursor:pointer"><div style="font-size:9.5px;font-family:ui-monospace,monospace;color:var(--text-muted)">/faq</div><div style="font-size:14px;font-weight:700;color:var(--text)">266</div></div>
+          <div style="flex:1;height:60px;background:var(--bg-card);border:1px solid var(--border);border-radius:8px;padding:8px 10px;display:flex;flex-direction:column;justify-content:space-between;cursor:pointer"><div style="font-size:9.5px;font-family:ui-monospace,monospace;color:var(--text-muted)">/resources</div><div style="font-size:14px;font-weight:700;color:var(--text)">194</div></div>
+        </div>
+
+        <!-- Row 4: 7 tiny, 46px -->
+        <div style="display:flex;gap:6px">
+          <div style="flex:1;height:46px;background:var(--bg-card);border:1px solid var(--border);border-radius:8px;padding:7px 9px;display:flex;flex-direction:column;justify-content:space-between;cursor:pointer;opacity:.75"><div style="font-size:9px;font-family:ui-monospace,monospace;color:var(--muted)">/terms</div><div style="font-size:12px;font-weight:700;color:var(--text-muted)">147</div></div>
+          <div style="flex:1;height:46px;background:var(--bg-card);border:1px solid var(--border);border-radius:8px;padding:7px 9px;display:flex;flex-direction:column;justify-content:space-between;cursor:pointer;opacity:.75"><div style="font-size:9px;font-family:ui-monospace,monospace;color:var(--muted)">/product</div><div style="font-size:12px;font-weight:700;color:var(--text-muted)">114</div></div>
+          <div style="flex:1;height:46px;background:var(--bg-card);border:1px solid var(--border);border-radius:8px;padding:7px 9px;display:flex;flex-direction:column;justify-content:space-between;cursor:pointer;opacity:.75"><div style="font-size:9px;font-family:ui-monospace,monospace;color:var(--muted)">/docs</div><div style="font-size:12px;font-weight:700;color:var(--text-muted)">95</div></div>
+          <div style="flex:1;height:46px;background:var(--bg-card);border:1px solid var(--border);border-radius:8px;padding:7px 9px;display:flex;flex-direction:column;justify-content:space-between;cursor:pointer;opacity:.75"><div style="font-size:9px;font-family:ui-monospace,monospace;color:var(--muted)">/blog</div><div style="font-size:12px;font-weight:700;color:var(--text-muted)">61</div></div>
+          <div style="flex:1;height:46px;background:var(--bg-card);border:1px solid var(--border);border-radius:8px;padding:7px 9px;display:flex;flex-direction:column;justify-content:space-between;cursor:pointer;opacity:.65"><div style="font-size:9px;font-family:ui-monospace,monospace;color:var(--muted)">/team</div><div style="font-size:12px;font-weight:700;color:var(--text-muted)">23</div></div>
+          <div style="flex:1;height:46px;background:var(--bg-card);border:1px solid var(--border);border-radius:8px;padding:7px 9px;display:flex;flex-direction:column;justify-content:space-between;cursor:pointer;opacity:.65"><div style="font-size:9px;font-family:ui-monospace,monospace;color:var(--muted)">/careers</div><div style="font-size:12px;font-weight:700;color:var(--text-muted)">17</div></div>
+          <div style="flex:1;height:46px;background:var(--bg-card);border:1px solid rgba(248,81,73,.25);border-radius:8px;padding:7px 9px;display:flex;flex-direction:column;justify-content:space-between;cursor:pointer"><div style="font-size:9px;font-family:ui-monospace,monospace;color:#f85149">/404</div><div style="font-size:12px;font-weight:700;color:#f85149">14</div></div>
+        </div>
+
+      </div>
+    </div>
+    <!-- /RIGHT -->
+
+  </div>
+</div>
+
+<script>
+let s7inited = false
+function initS7() {
+  if (s7inited) return
+  s7inited = true
+  const el = document.getElementById('s7chart')
+  if (!el) return
+  const ctx = el.getContext('2d')
+  const days = 30
+  const data = Array.from({length:days}, (_,i) => Math.round(820 + i*19 + Math.sin(i*.38)*110 + Math.random()*75))
+  const grad = ctx.createLinearGradient(0,0,0,130)
+  grad.addColorStop(0,'rgba(47,129,247,.28)')
+  grad.addColorStop(1,'rgba(47,129,247,0)')
+  new Chart(el, {
+    type:'line',
+    data:{ labels:data.map((_,i)=>i), datasets:[{ data, borderColor:'#2F81F7', borderWidth:1.5, fill:{target:'origin',above:grad}, tension:0.4, pointRadius:0 }] },
+    options:{
+      responsive:true, maintainAspectRatio:false,
+      animation:{ duration:700, easing:'easeOutCubic' },
+      plugins:{ legend:{display:false}, tooltip:{ backgroundColor:'#161b22', borderColor:'#30363d', borderWidth:1, bodyColor:'#e6edf3', padding:6 } },
+      scales:{ x:{display:false}, y:{ position:'right', grid:{color:'rgba(48,54,61,.4)',drawTicks:false}, border:{display:false,dash:[3,3]}, ticks:{color:'#484f58',font:{size:9},maxTicksLimit:4,padding:4} } }
+    }
+  })
+  const bc = document.getElementById('s7barcode')
+  if (bc && !bc.children.length) {
+    for (let i=0;i<70;i++) {
+      const b = document.createElement('div')
+      b.style.cssText = 'width:3px;border-radius:1px 1px 0 0;background:#3fb950;flex-shrink:0;height:'+Math.round(5+Math.random()*35)+'px;opacity:'+( 0.2+Math.random()*.8).toFixed(2)
+      bc.appendChild(b)
+    }
+  }
+}
+function refreshS7(btn) {
+  const icon = document.getElementById('s7-ri')
+  if (icon) { icon.style.animation='spin .65s linear'; setTimeout(()=>{ icon.style.animation='' },700) }
+}
+</script>
+</body>
+</html>
