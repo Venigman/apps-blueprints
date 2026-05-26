@@ -2651,7 +2651,7 @@ setTimeout(initCharts, 100)
       <span style="font-size:13px;font-weight:700;color:var(--text)">Umbrave</span>
     </div>
     <div style="display:flex;align-items:center;background:var(--bg);border:1px solid var(--border);border-radius:8px;overflow:hidden;width:260px">
-      <div style="padding:6px 10px;font-size:10.5px;color:var(--muted);border-right:1px solid var(--border);background:var(--bg-hover);white-space:nowrap">https://</div>
+      <div style="padding:6px 10px;font-size:10.5px;color:var(--text-3);border-right:1px solid var(--border);background:var(--bg-el);white-space:nowrap">https://</div>
       <div style="padding:6px 12px;font-size:12px;color:var(--text);flex:1">mysite.com</div>
       <div style="width:6px;height:6px;border-radius:50%;background:#3fb950;margin-right:10px;flex-shrink:0"></div>
     </div>
@@ -2663,147 +2663,126 @@ setTimeout(initCharts, 100)
 
   <div style="display:grid;grid-template-columns:1fr 1fr;height:calc(100vh - 160px);overflow:hidden">
 
-    <!-- LEFT -->
+    <!-- ── LEFT ── -->
     <div style="border-right:1px solid var(--border);overflow-y:auto;display:flex;flex-direction:column">
 
-      <!-- Engagement + chart -->
-      <div style="padding:18px 20px;border-bottom:1px solid var(--border)">
+      <!-- Stat + heatmap -->
+      <div style="padding:16px 20px 18px;border-bottom:1px solid var(--border);flex-shrink:0">
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
-          <span style="font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.07em">Visitor Retention</span>
-          <span style="font-size:11px;color:var(--muted)">Last 30 days</span>
+          <span style="font-size:11px;font-weight:600;color:var(--text-2)">Total activity</span>
+          <span style="font-size:11px;color:var(--text-3)">Last 30 days</span>
         </div>
         <div style="display:flex;align-items:center;gap:14px;margin-bottom:16px">
-          <svg width="46" height="46" viewBox="0 0 46 46" style="flex-shrink:0">
-            <circle cx="23" cy="23" r="18" fill="none" stroke="var(--bg-hover)" stroke-width="5.5"/>
-            <circle cx="23" cy="23" r="18" fill="none" stroke="#2F81F7" stroke-width="5.5" stroke-dasharray="75.8 37.3" stroke-linecap="round" style="transform-origin:center;transform:rotate(-90deg)"/>
-            <text x="23" y="27" text-anchor="middle" font-size="9.5" font-weight="700" fill="#e6edf3">67%</text>
+          <svg width="44" height="44" viewBox="0 0 44 44" style="flex-shrink:0">
+            <circle cx="22" cy="22" r="17" fill="none" stroke="var(--bg-el)" stroke-width="5"/>
+            <circle cx="22" cy="22" r="17" fill="none" stroke="#2F81F7" stroke-width="5" stroke-dasharray="71.6 35.3" stroke-linecap="round" style="transform-origin:center;transform:rotate(-90deg)"/>
           </svg>
           <div>
-            <div style="font-size:24px;font-weight:700;color:var(--text);line-height:1">67%</div>
-            <div style="font-size:11.5px;color:var(--text-muted);margin-top:3px">returned within 30 days &nbsp;<span style="color:#3fb950;font-weight:600">↑ 4.2%</span></div>
-          </div>
-          <div style="margin-left:auto;text-align:right;flex-shrink:0">
-            <div style="font-size:10px;color:var(--muted)">Returning today</div>
-            <div style="font-size:14px;font-weight:600;color:var(--text)">1,842</div>
+            <div style="font-size:26px;font-weight:800;color:var(--text);line-height:1.1">67% <span style="font-size:14px;font-weight:400;color:var(--text-2)">of 8 hr 0 min</span></div>
+            <div style="font-size:11px;color:var(--text-3);margin-top:4px">avg. daily session target &nbsp;<span style="color:#3fb950;font-weight:600">↑ 4.2%</span></div>
           </div>
         </div>
-        <div style="height:130px;position:relative"><canvas id="s7chart"></canvas></div>
+        <div id="s7hm"></div>
       </div>
 
-      <!-- 5 KPI strip -->
-      <div style="display:flex;border-bottom:1px solid var(--border);flex-shrink:0">
-        <div style="flex:1;padding:11px 13px;border-right:1px solid var(--border)">
-          <svg width="14" height="14" fill="none" stroke="var(--text-2)" stroke-width="1.5" style="margin-bottom:4px"><rect x="2" y="3" width="10" height="9" rx="1"/><path d="M5 6h4M5 9h3"/></svg>
-          <div style="font-size:9.5px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.05em;margin-bottom:3px">Pageviews</div>
-          <div style="font-size:15px;font-weight:700;color:var(--text);line-height:1">84,241</div>
-          <div style="font-size:9.5px;font-weight:600;color:#3fb950;margin-top:3px">↑ 8.2%</div>
+      <!-- 4 KPI cards -->
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);border-bottom:1px solid var(--border);flex-shrink:0">
+        <div style="padding:12px 14px;border-right:1px solid var(--border)">
+          <svg width="14" height="14" fill="none" stroke="var(--text-3)" stroke-width="1.5" style="margin-bottom:6px;display:block"><circle cx="7" cy="5.5" r="2.5"/><path d="M2 13c0-2.8 2.2-5 5-5s5 2.2 5 5"/></svg>
+          <div style="font-size:10px;color:var(--text-2);margin-bottom:5px">Unique Visitors</div>
+          <div style="font-size:20px;font-weight:700;color:var(--text);line-height:1;margin-bottom:5px">24,553</div>
+          <div style="font-size:9.5px;color:var(--red);display:flex;align-items:center;gap:3px"><svg width="9" height="9" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4.5 1v7M1.5 5l3 3 3-3"/></svg>12.35%</div>
         </div>
-        <div style="flex:1;padding:11px 13px;border-right:1px solid var(--border)">
-          <svg width="14" height="14" fill="none" stroke="var(--text-2)" stroke-width="1.5" style="margin-bottom:4px"><path d="M2 10c0-2.2 1.8-4 4-4s4 1.8 4 4"/><path d="M6 6V4M4 4h4"/></svg>
-          <div style="font-size:9.5px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.05em;margin-bottom:3px">Sessions</div>
-          <div style="font-size:15px;font-weight:700;color:var(--text);line-height:1">31,482</div>
-          <div style="font-size:9.5px;font-weight:600;color:#3fb950;margin-top:3px">↑ 5.4%</div>
+        <div style="padding:12px 14px;border-right:1px solid var(--border)">
+          <svg width="14" height="14" fill="none" stroke="var(--text-3)" stroke-width="1.5" style="margin-bottom:6px;display:block"><rect x="2" y="3" width="10" height="9" rx="1"/><path d="M5 6h4M5 9h3"/></svg>
+          <div style="font-size:10px;color:var(--text-2);margin-bottom:5px">Page Views</div>
+          <div style="font-size:20px;font-weight:700;color:var(--text);line-height:1;margin-bottom:5px">58,762</div>
+          <div style="font-size:9.5px;color:var(--red);display:flex;align-items:center;gap:3px"><svg width="9" height="9" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4.5 1v7M1.5 5l3 3 3-3"/></svg>15.40%</div>
         </div>
-        <div style="flex:1;padding:11px 13px;border-right:1px solid var(--border)">
-          <svg width="14" height="14" fill="none" stroke="var(--text-2)" stroke-width="1.5" style="margin-bottom:4px"><circle cx="7" cy="5.5" r="2.5"/><path d="M2 13c0-2.8 2.2-5 5-5s5 2.2 5 5"/></svg>
-          <div style="font-size:9.5px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.05em;margin-bottom:3px">Visitors</div>
-          <div style="font-size:15px;font-weight:700;color:var(--text);line-height:1">24,553</div>
-          <div style="font-size:9.5px;font-weight:600;color:#3fb950;margin-top:3px">↑ 12.4%</div>
+        <div style="padding:12px 14px;border-right:1px solid var(--border)">
+          <svg width="14" height="14" fill="none" stroke="var(--text-3)" stroke-width="1.5" style="margin-bottom:6px;display:block"><path d="M3 7h8M9 4l2 3-2 3"/></svg>
+          <div style="font-size:10px;color:var(--text-2);margin-bottom:5px">Bounce Rate</div>
+          <div style="font-size:20px;font-weight:700;color:var(--text);line-height:1;margin-bottom:5px">38.60%</div>
+          <div style="font-size:9.5px;color:#3fb950;display:flex;align-items:center;gap:3px"><svg width="9" height="9" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4.5 8V1M1.5 4l3-3 3 3"/></svg>−1.20%</div>
         </div>
-        <div style="flex:1;padding:11px 13px;border-right:1px solid var(--border)">
-          <svg width="14" height="14" fill="none" stroke="var(--text-2)" stroke-width="1.5" style="margin-bottom:4px"><circle cx="7" cy="7" r="5.5"/><path d="M7 4.5v3l1.5 1.5"/></svg>
-          <div style="font-size:9.5px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.05em;margin-bottom:3px">Avg. Session</div>
-          <div style="font-size:15px;font-weight:700;color:var(--text);line-height:1">2m 41s</div>
-          <div style="font-size:9.5px;font-weight:600;color:#8b949e;margin-top:3px">→ 0.2%</div>
-        </div>
-        <div style="flex:1;padding:11px 13px">
-          <svg width="14" height="14" fill="none" stroke="var(--text-2)" stroke-width="1.5" style="margin-bottom:4px"><path d="M3 7h8M9 4l2 3-2 3"/></svg>
-          <div style="font-size:9.5px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.05em;margin-bottom:3px">Bounce Rate</div>
-          <div style="font-size:15px;font-weight:700;color:var(--text);line-height:1">38.2%</div>
-          <div style="font-size:9.5px;font-weight:600;color:#3fb950;margin-top:3px">↓ 3.1%</div>
+        <div style="padding:12px 14px">
+          <svg width="14" height="14" fill="none" stroke="var(--text-3)" stroke-width="1.5" style="margin-bottom:6px;display:block"><circle cx="7" cy="7" r="5.5"/><path d="M7 4.5v3l1.5 1.5"/></svg>
+          <div style="font-size:10px;color:var(--text-2);margin-bottom:5px">Session Duration</div>
+          <div style="font-size:20px;font-weight:700;color:var(--text);line-height:1;margin-bottom:5px">3:15</div>
+          <div style="font-size:9.5px;color:#3fb950;display:flex;align-items:center;gap:3px"><svg width="9" height="9" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4.5 8V1M1.5 4l3-3 3 3"/></svg>+10.50%</div>
         </div>
       </div>
 
-      <!-- Bottom: Countries + Privacy -->
+      <!-- Countries + Privacy -->
       <div style="display:flex;flex:1;min-height:0">
         <div style="flex:1;padding:16px 18px;border-right:1px solid var(--border);overflow-y:auto">
           <div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:14px">Top Countries</div>
-          <div style="display:flex;align-items:center;gap:8px;margin-bottom:9px"><span style="font-size:14px">🇺🇦</span><span style="font-size:11.5px;color:var(--text-muted);width:58px;flex-shrink:0">Ukraine</span><div style="flex:1;height:4px;background:var(--bg-hover);border-radius:2px"><div style="width:47%;height:4px;border-radius:2px;background:#2F81F7"></div></div><span style="font-size:11px;font-weight:600;color:var(--text);width:28px;text-align:right;flex-shrink:0">47%</span></div>
-          <div style="display:flex;align-items:center;gap:8px;margin-bottom:9px"><span style="font-size:14px">🇨🇦</span><span style="font-size:11.5px;color:var(--text-muted);width:58px;flex-shrink:0">Canada</span><div style="flex:1;height:4px;background:var(--bg-hover);border-radius:2px"><div style="width:33%;height:4px;border-radius:2px;background:#2F81F7;opacity:.75"></div></div><span style="font-size:11px;font-weight:600;color:var(--text);width:28px;text-align:right;flex-shrink:0">33%</span></div>
-          <div style="display:flex;align-items:center;gap:8px;margin-bottom:9px"><span style="font-size:14px">🇩🇪</span><span style="font-size:11.5px;color:var(--text-muted);width:58px;flex-shrink:0">Germany</span><div style="flex:1;height:4px;background:var(--bg-hover);border-radius:2px"><div style="width:24%;height:4px;border-radius:2px;background:#2F81F7;opacity:.5"></div></div><span style="font-size:11px;font-weight:600;color:var(--text);width:28px;text-align:right;flex-shrink:0">24%</span></div>
-          <div style="display:flex;align-items:center;gap:8px;margin-bottom:9px"><span style="font-size:14px">🌍</span><span style="font-size:11.5px;color:var(--text-muted);width:58px;flex-shrink:0">Other</span><div style="flex:1;height:4px;background:var(--bg-hover);border-radius:2px"><div style="width:12%;height:4px;border-radius:2px;background:#2F81F7;opacity:.3"></div></div><span style="font-size:11px;font-weight:600;color:var(--text);width:28px;text-align:right;flex-shrink:0">12%</span></div>
-          <div style="font-size:10.5px;color:var(--muted);margin-top:10px;line-height:1.5">No IPs stored · anonymous geo signals</div>
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px"><span style="font-size:13px">🇺🇦</span><span style="font-size:11.5px;color:var(--text-2);width:58px;flex-shrink:0">Ukraine</span><div style="flex:1;height:4px;background:var(--bg-el);border-radius:2px"><div style="width:47%;height:4px;border-radius:2px;background:#2F81F7"></div></div><span style="font-size:11px;font-weight:600;color:var(--text);width:28px;text-align:right;flex-shrink:0">47%</span></div>
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px"><span style="font-size:13px">🇨🇦</span><span style="font-size:11.5px;color:var(--text-2);width:58px;flex-shrink:0">Canada</span><div style="flex:1;height:4px;background:var(--bg-el);border-radius:2px"><div style="width:33%;height:4px;border-radius:2px;background:#2F81F7;opacity:.75"></div></div><span style="font-size:11px;font-weight:600;color:var(--text);width:28px;text-align:right;flex-shrink:0">33%</span></div>
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px"><span style="font-size:13px">🇩🇪</span><span style="font-size:11.5px;color:var(--text-2);width:58px;flex-shrink:0">Germany</span><div style="flex:1;height:4px;background:var(--bg-el);border-radius:2px"><div style="width:24%;height:4px;border-radius:2px;background:#2F81F7;opacity:.5"></div></div><span style="font-size:11px;font-weight:600;color:var(--text);width:28px;text-align:right;flex-shrink:0">24%</span></div>
+          <div style="display:flex;align-items:center;gap:8px"><span style="font-size:13px">🌍</span><span style="font-size:11.5px;color:var(--text-2);width:58px;flex-shrink:0">Other</span><div style="flex:1;height:4px;background:var(--bg-el);border-radius:2px"><div style="width:12%;height:4px;border-radius:2px;background:#2F81F7;opacity:.3"></div></div><span style="font-size:11px;font-weight:600;color:var(--text);width:28px;text-align:right;flex-shrink:0">12%</span></div>
+          <div style="font-size:10px;color:var(--text-3);margin-top:12px">No IPs stored · anonymous geo signals</div>
         </div>
         <div style="flex:1;padding:16px 18px;overflow-y:auto">
           <div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:8px">Privacy Compliance</div>
-          <div style="font-size:34px;font-weight:700;color:var(--text);line-height:1;margin-bottom:3px">99.2</div>
-          <div style="font-size:10.5px;color:var(--text-muted);margin-bottom:12px">GDPR · CCPA · PECR</div>
+          <div style="font-size:36px;font-weight:800;color:var(--text);line-height:1;margin-bottom:3px">99.2</div>
+          <div style="font-size:10.5px;color:var(--text-3);margin-bottom:12px">GDPR · CCPA · PECR</div>
           <div style="display:flex;flex-direction:column;gap:6px;margin-bottom:14px">
-            <div style="display:flex;align-items:center;justify-content:space-between"><span style="font-size:10.5px;color:var(--text-muted)">GDPR</span><span style="font-size:10px;font-weight:600;color:#3fb950;background:rgba(63,185,80,.1);border:1px solid rgba(63,185,80,.2);border-radius:999px;padding:1px 7px">Pass</span></div>
-            <div style="display:flex;align-items:center;justify-content:space-between"><span style="font-size:10.5px;color:var(--text-muted)">CCPA</span><span style="font-size:10px;font-weight:600;color:#3fb950;background:rgba(63,185,80,.1);border:1px solid rgba(63,185,80,.2);border-radius:999px;padding:1px 7px">Pass</span></div>
-            <div style="display:flex;align-items:center;justify-content:space-between"><span style="font-size:10.5px;color:var(--text-muted)">PECR</span><span style="font-size:10px;font-weight:600;color:#d4a017;background:rgba(210,153,34,.1);border:1px solid rgba(210,153,34,.2);border-radius:999px;padding:1px 7px">Review</span></div>
+            <div style="display:flex;align-items:center;justify-content:space-between"><span style="font-size:10.5px;color:var(--text-2)">GDPR</span><span style="font-size:10px;font-weight:600;color:#3fb950;background:rgba(63,185,80,.1);border:1px solid rgba(63,185,80,.2);border-radius:999px;padding:1px 7px">Pass</span></div>
+            <div style="display:flex;align-items:center;justify-content:space-between"><span style="font-size:10.5px;color:var(--text-2)">CCPA</span><span style="font-size:10px;font-weight:600;color:#3fb950;background:rgba(63,185,80,.1);border:1px solid rgba(63,185,80,.2);border-radius:999px;padding:1px 7px">Pass</span></div>
+            <div style="display:flex;align-items:center;justify-content:space-between"><span style="font-size:10.5px;color:var(--text-2)">PECR</span><span style="font-size:10px;font-weight:600;color:#d4a017;background:rgba(210,153,34,.1);border:1px solid rgba(210,153,34,.2);border-radius:999px;padding:1px 7px">Review</span></div>
           </div>
           <div id="s7barcode" style="display:flex;align-items:flex-end;gap:1.5px;height:40px"></div>
-          <div style="font-size:10px;color:var(--muted);margin-top:5px">privacy signal strength · 30d</div>
+          <div style="font-size:10px;color:var(--text-3);margin-top:5px">privacy signal strength · 30d</div>
         </div>
       </div>
     </div>
     <!-- /LEFT -->
 
-    <!-- RIGHT: Top Pages -->
+    <!-- ── RIGHT: Top Pages ── -->
     <div style="overflow-y:auto;display:flex;flex-direction:column">
       <div style="padding:14px 18px;border-bottom:1px solid var(--border);flex-shrink:0">
-        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+        <div style="display:flex;align-items:center;justify-content:space-between">
           <span style="font-size:13px;font-weight:700;color:var(--text)">Top Pages</span>
           <span style="font-size:11px;color:var(--text-3)">14 pages · sorted by visitors · 7 days</span>
         </div>
-        <!-- Legend -->
-        <div style="display:flex;align-items:center;gap:14px;font-size:10.5px;color:var(--text-2)">
-          <span style="font-weight:600;color:var(--text-3);text-transform:uppercase;letter-spacing:.05em;font-size:9.5px">Color =</span>
-          <span style="display:flex;align-items:center;gap:5px"><span style="width:10px;height:3px;border-radius:2px;background:#2F81F7;display:inline-block"></span>High traffic hub</span>
-          <span style="display:flex;align-items:center;gap:5px"><span style="width:10px;height:3px;border-radius:2px;background:#3fb950;display:inline-block"></span>Growing ↑</span>
-          <span style="display:flex;align-items:center;gap:5px"><span style="width:10px;height:3px;border-radius:2px;background:#8957e5;display:inline-block"></span>Product / feature</span>
-          <span style="display:flex;align-items:center;gap:5px"><span style="width:10px;height:3px;border-radius:2px;background:#d4a017;display:inline-block"></span>Content / blog</span>
-        </div>
       </div>
       <div style="padding:12px;flex:1">
-
-        <!-- Bento grid: 12 cols, card width ∝ traffic volume -->
         <div style="display:grid;grid-template-columns:repeat(12,1fr);gap:6px">
 
-          <!-- ─ Tier 1 ─ h=110px -->
-          <div style="grid-column:span 6;height:110px;background:var(--bg-card);border:1px solid var(--border);border-top:2px solid #2F81F7;border-radius:8px;padding:14px 16px;display:flex;flex-direction:column;justify-content:space-between;cursor:pointer">
+          <!-- Tier 1 h:110px -->
+          <div style="grid-column:span 6;height:110px;background:var(--bg-card);border:1px solid var(--border);border-radius:8px;padding:14px 16px;display:flex;flex-direction:column;justify-content:space-between;cursor:pointer">
             <span style="font-size:11px;font-family:ui-monospace,monospace;color:var(--text-2)">/home</span>
             <span style="font-size:28px;font-weight:800;color:var(--text);line-height:1">12,345</span>
           </div>
-          <div style="grid-column:span 4;height:110px;background:var(--bg-card);border:1px solid var(--border);border-top:2px solid #3fb950;border-radius:8px;padding:14px 16px;display:flex;flex-direction:column;justify-content:space-between;cursor:pointer">
+          <div style="grid-column:span 4;height:110px;background:var(--bg-card);border:1px solid var(--border);border-radius:8px;padding:14px 16px;display:flex;flex-direction:column;justify-content:space-between;cursor:pointer">
             <span style="font-size:11px;font-family:ui-monospace,monospace;color:var(--text-2)">/pricing</span>
             <span style="font-size:26px;font-weight:800;color:var(--text);line-height:1">8,456</span>
           </div>
-          <div style="grid-column:span 2;height:110px;background:var(--bg-card);border:1px solid var(--border);border-top:2px solid #d4a017;border-radius:8px;padding:14px 12px;display:flex;flex-direction:column;justify-content:space-between;cursor:pointer">
+          <div style="grid-column:span 2;height:110px;background:var(--bg-card);border:1px solid var(--border);border-radius:8px;padding:14px 12px;display:flex;flex-direction:column;justify-content:space-between;cursor:pointer">
             <span style="font-size:10px;font-family:ui-monospace,monospace;color:var(--text-2)">/contact</span>
             <span style="font-size:22px;font-weight:800;color:var(--text);line-height:1">5,795</span>
           </div>
 
-          <!-- ─ Tier 2 ─ h=80px -->
-          <div style="grid-column:span 5;height:80px;background:var(--bg-card);border:1px solid var(--border);border-top:2px solid #2F81F7;border-radius:8px;padding:12px 14px;display:flex;flex-direction:column;justify-content:space-between;cursor:pointer">
+          <!-- Tier 2 h:80px -->
+          <div style="grid-column:span 5;height:80px;background:var(--bg-card);border:1px solid var(--border);border-radius:8px;padding:12px 14px;display:flex;flex-direction:column;justify-content:space-between;cursor:pointer">
             <span style="font-size:10px;font-family:ui-monospace,monospace;color:var(--text-2)">/how-it-works</span>
             <span style="font-size:20px;font-weight:700;color:var(--text);line-height:1">4,679</span>
           </div>
-          <div style="grid-column:span 3;height:80px;background:var(--bg-card);border:1px solid var(--border);border-top:2px solid #8957e5;border-radius:8px;padding:12px 14px;display:flex;flex-direction:column;justify-content:space-between;cursor:pointer">
+          <div style="grid-column:span 3;height:80px;background:var(--bg-card);border:1px solid var(--border);border-radius:8px;padding:12px 14px;display:flex;flex-direction:column;justify-content:space-between;cursor:pointer">
             <span style="font-size:10px;font-family:ui-monospace,monospace;color:var(--text-2)">/integrations</span>
             <span style="font-size:20px;font-weight:700;color:var(--text);line-height:1">3,213</span>
           </div>
-          <div style="grid-column:span 2;height:80px;background:var(--bg-card);border:1px solid var(--border);border-top:2px solid #3fb950;border-radius:8px;padding:12px 12px;display:flex;flex-direction:column;justify-content:space-between;cursor:pointer">
+          <div style="grid-column:span 2;height:80px;background:var(--bg-card);border:1px solid var(--border);border-radius:8px;padding:12px 12px;display:flex;flex-direction:column;justify-content:space-between;cursor:pointer">
             <span style="font-size:10px;font-family:ui-monospace,monospace;color:var(--text-2)">/about</span>
             <span style="font-size:18px;font-weight:700;color:var(--text);line-height:1">2,566</span>
           </div>
-          <div style="grid-column:span 2;height:80px;background:var(--bg-card);border:1px solid var(--border);border-top:2px solid #d4a017;border-radius:8px;padding:12px 12px;display:flex;flex-direction:column;justify-content:space-between;cursor:pointer">
+          <div style="grid-column:span 2;height:80px;background:var(--bg-card);border:1px solid var(--border);border-radius:8px;padding:12px 12px;display:flex;flex-direction:column;justify-content:space-between;cursor:pointer">
             <span style="font-size:10px;font-family:ui-monospace,monospace;color:var(--text-2)">/blog-post</span>
             <span style="font-size:18px;font-weight:700;color:var(--text);line-height:1">1,973</span>
           </div>
 
-          <!-- ─ Tier 3 ─ h=56px -->
+          <!-- Tier 3 h:56px -->
           <div style="grid-column:span 4;height:56px;background:var(--bg-card);border:1px solid var(--border);border-radius:8px;padding:8px 12px;display:flex;flex-direction:column;justify-content:space-between;cursor:pointer">
             <span style="font-size:9.5px;font-family:ui-monospace,monospace;color:var(--text-2)">/contact</span>
             <span style="font-size:15px;font-weight:700;color:var(--text)">899</span>
@@ -2821,11 +2800,11 @@ setTimeout(initCharts, 100)
             <span style="font-size:15px;font-weight:700;color:var(--text)">266</span>
           </div>
           <div style="grid-column:span 1;height:56px;background:var(--bg-card);border:1px solid var(--border);border-radius:8px;padding:8px 8px;display:flex;flex-direction:column;justify-content:space-between;cursor:pointer">
-            <span style="font-size:8px;font-family:ui-monospace,monospace;color:var(--text-2);white-space:nowrap;overflow:hidden">rsrcs</span>
+            <span style="font-size:8px;font-family:ui-monospace,monospace;color:var(--text-2);white-space:nowrap;overflow:hidden">/rsrc</span>
             <span style="font-size:13px;font-weight:700;color:var(--text)">194</span>
           </div>
 
-          <!-- ─ Tier 4 ─ h=40px -->
+          <!-- Tier 4 h:40px -->
           <div style="grid-column:span 4;height:40px;background:var(--bg-card);border:1px solid var(--border);border-radius:7px;padding:0 12px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;opacity:.65">
             <span style="font-size:9.5px;font-family:ui-monospace,monospace;color:var(--text-3)">/terms</span>
             <span style="font-size:12px;font-weight:700;color:var(--text-2)">147</span>
@@ -2838,15 +2817,15 @@ setTimeout(initCharts, 100)
             <span style="font-size:9px;font-family:ui-monospace,monospace;color:var(--text-3)">/docs</span>
             <span style="font-size:12px;font-weight:700;color:var(--text-2)">95</span>
           </div>
-          <div style="grid-column:span 1;height:40px;background:var(--bg-card);border:1px solid var(--border);border-radius:7px;padding:0 7px;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:1px;cursor:pointer;opacity:.5">
+          <div style="grid-column:span 1;height:40px;background:var(--bg-card);border:1px solid var(--border);border-radius:7px;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:1px;cursor:pointer;opacity:.5">
             <span style="font-size:8px;font-family:ui-monospace,monospace;color:var(--text-3)">blog</span>
             <span style="font-size:10px;font-weight:700;color:var(--text-2)">61</span>
           </div>
-          <div style="grid-column:span 1;height:40px;background:var(--bg-card);border:1px solid var(--border);border-radius:7px;padding:0 7px;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:1px;cursor:pointer;opacity:.4">
+          <div style="grid-column:span 1;height:40px;background:var(--bg-card);border:1px solid var(--border);border-radius:7px;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:1px;cursor:pointer;opacity:.4">
             <span style="font-size:8px;font-family:ui-monospace,monospace;color:var(--text-3)">team</span>
             <span style="font-size:10px;font-weight:700;color:var(--text-2)">23</span>
           </div>
-          <div style="grid-column:span 1;height:40px;background:var(--bg-card);border:1px solid rgba(248,81,73,.25);border-radius:7px;padding:0 7px;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:1px;cursor:pointer">
+          <div style="grid-column:span 1;height:40px;background:var(--bg-card);border:1px solid rgba(248,81,73,.25);border-radius:7px;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:1px;cursor:pointer">
             <span style="font-size:8px;font-family:ui-monospace,monospace;color:#f85149">/404</span>
             <span style="font-size:10px;font-weight:700;color:#f85149">14</span>
           </div>
@@ -2860,11 +2839,11 @@ setTimeout(initCharts, 100)
             <span style="font-size:9.5px;color:var(--text-3)">41,824 total</span>
           </div>
           <div style="display:flex;height:8px;border-radius:4px;overflow:hidden;gap:1px">
-            <div style="flex:41;background:#2F81F7" title="Hub pages · 41%"></div>
-            <div style="flex:26;background:#3fb950" title="Growing · 26%"></div>
-            <div style="flex:19;background:#d4a017" title="Content · 19%"></div>
-            <div style="flex:8;background:#8957e5" title="Feature · 8%"></div>
-            <div style="flex:7;background:var(--bg-el)" title="Long tail · 7%"></div>
+            <div style="flex:41;background:#2F81F7"></div>
+            <div style="flex:26;background:#3fb950"></div>
+            <div style="flex:19;background:#d4a017"></div>
+            <div style="flex:8;background:#8957e5"></div>
+            <div style="flex:7;background:var(--bg-el)"></div>
           </div>
           <div style="display:flex;align-items:center;gap:14px;margin-top:7px;flex-wrap:wrap">
             <span style="display:flex;align-items:center;gap:5px;font-size:9.5px;color:var(--text-2)"><span style="width:8px;height:8px;border-radius:2px;background:#2F81F7;display:inline-block;flex-shrink:0"></span>Hub · 41%</span>
@@ -2887,36 +2866,65 @@ let s7inited = false
 function initS7() {
   if (s7inited) return
   s7inited = true
-  const el = document.getElementById('s7chart')
-  if (!el) return
-  const ctx = el.getContext('2d')
-  const days = 30
-  const data = Array.from({length:days}, (_,i) => Math.round(820 + i*19 + Math.sin(i*.38)*110 + Math.random()*75))
-  const grad = ctx.createLinearGradient(0,0,0,130)
-  grad.addColorStop(0,'rgba(47,129,247,.28)')
-  grad.addColorStop(1,'rgba(47,129,247,0)')
-  new Chart(el, {
-    type:'line',
-    data:{ labels:data.map((_,i)=>i), datasets:[{ data, borderColor:'#2F81F7', borderWidth:1.5, fill:{target:'origin',above:grad}, tension:0.4, pointRadius:0 }] },
-    options:{
-      responsive:true, maintainAspectRatio:false,
-      animation:{ duration:700, easing:'easeOutCubic' },
-      plugins:{ legend:{display:false}, tooltip:{ backgroundColor:'#161b22', borderColor:'#30363d', borderWidth:1, bodyColor:'#e6edf3', padding:6 } },
-      scales:{ x:{display:false}, y:{ position:'right', grid:{color:'rgba(48,54,61,.4)',drawTicks:false}, border:{display:false,dash:[3,3]}, ticks:{color:'#484f58',font:{size:9},maxTicksLimit:4,padding:4} } }
+  buildS7Heatmap()
+  buildS7Barcode()
+}
+
+function buildS7Heatmap() {
+  const el = document.getElementById('s7hm')
+  if (!el || el.children.length) return
+  const W = 52, H = 7
+  const dayLabels = ['Mo','Tu','We','Th','Fr','Sa','Su']
+  const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']
+  const monthWeek = [0,4,9,13,17,22,26,30,35,39,43,48]
+  let seed = 42
+  const rand = () => { seed = (seed * 9301 + 49297) % 233280; return seed / 233280 }
+  const data = []
+  for (let w = 0; w < W; w++) {
+    const col = []
+    for (let d = 0; d < H; d++) {
+      const r = rand()
+      const isWknd = d >= 5
+      const base = isWknd ? 0.55 : 0.25
+      col.push(r < base ? 0 : r < base+.18 ? 1 : r < base+.3 ? 2 : r < base+.4 ? 3 : 4)
     }
-  })
+    data.push(col)
+  }
+  const cs = 11, gap = 2, lp = 24
+  let html = '<div style="overflow-x:auto"><div style="display:inline-block">'
+  html += '<div style="display:flex;padding-left:' + lp + 'px;margin-bottom:3px">'
+  for (let w = 0; w < W; w++) {
+    const mi = monthWeek.indexOf(w)
+    html += '<div style="width:' + (cs+gap) + 'px;font-size:9px;color:var(--text-3);flex-shrink:0">' + (mi >= 0 ? months[mi] : '') + '</div>'
+  }
+  html += '</div>'
+  for (let d = 0; d < H; d++) {
+    html += '<div style="display:flex;align-items:center;margin-bottom:' + gap + 'px">'
+    html += '<div style="width:' + lp + 'px;flex-shrink:0;font-size:9px;color:var(--text-3)">' + dayLabels[d] + '</div>'
+    for (let w = 0; w < W; w++) {
+      const lv = data[w][d]
+      const bg = lv===0?'var(--bg-el)':lv===1?'rgba(47,129,247,.18)':lv===2?'rgba(47,129,247,.42)':lv===3?'rgba(47,129,247,.68)':'#2F81F7'
+      html += '<div style="width:' + cs + 'px;height:' + cs + 'px;border-radius:2px;background:' + bg + ';margin-right:' + gap + 'px;flex-shrink:0"></div>'
+    }
+    html += '</div>'
+  }
+  html += '</div></div>'
+  el.innerHTML = html
+}
+
+function buildS7Barcode() {
   const bc = document.getElementById('s7barcode')
-  if (bc && !bc.children.length) {
-    for (let i=0;i<70;i++) {
-      const b = document.createElement('div')
-      b.style.cssText = 'width:3px;border-radius:1px 1px 0 0;background:#3fb950;flex-shrink:0;height:'+Math.round(5+Math.random()*35)+'px;opacity:'+( 0.2+Math.random()*.8).toFixed(2)
-      bc.appendChild(b)
-    }
+  if (!bc || bc.children.length) return
+  for (let i = 0; i < 70; i++) {
+    const b = document.createElement('div')
+    b.style.cssText = 'width:3px;border-radius:1px 1px 0 0;background:#3fb950;flex-shrink:0;height:' + Math.round(5+Math.random()*35) + 'px;opacity:' + (0.2+Math.random()*.8).toFixed(2)
+    bc.appendChild(b)
   }
 }
+
 function refreshS7(btn) {
   const icon = document.getElementById('s7-ri')
-  if (icon) { icon.style.animation='spin .65s linear'; setTimeout(()=>{ icon.style.animation='' },700) }
+  if (icon) { icon.style.animation = 'spin .65s linear'; setTimeout(()=>{ icon.style.animation='' }, 700) }
 }
 </script>
 </body>
